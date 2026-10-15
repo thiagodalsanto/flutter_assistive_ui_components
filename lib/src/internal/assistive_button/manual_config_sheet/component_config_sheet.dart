@@ -5,9 +5,11 @@ import 'package:flutter_assistive_ui_components/src/internal/assistive_button/ma
 import 'package:flutter_assistive_ui_components/src/internal/assistive_button/manual_config_sheet/config_section.dart';
 import 'package:flutter_assistive_ui_components/src/internal/assistive_button/manual_config_sheet/config_slider_row.dart';
 import 'package:flutter_assistive_ui_components/src/internal/assistive_button/manual_config_sheet/config_switch_row.dart';
+import 'package:flutter_assistive_ui_components/src/helpers/preset_size_multiplier.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_assistive_ui_components/src/providers/providers.dart';
+import 'package:flutter_assistive_ui_components/src/internal/assistive_text_pt.dart';
 
 class ComponentConfigSheet extends StatefulWidget {
   final String component;
@@ -71,6 +73,30 @@ class _ComponentConfigSheetState extends State<ComponentConfigSheet> {
   bool buttonShowFeedback = true;
   double buttonPressDelayMs = 0;
   bool buttonIconEnabled = true;
+
+  double bigButtonWidth = 200;
+  double bigButtonHeight = 80;
+  double bigButtonFontSize = 16;
+  double bigButtonTouchPadding = 12;
+  double bigButtonPadding = 8;
+  Color bigButtonColor = Colors.blue;
+  Color bigButtonFontColor = Colors.white;
+  bool bigButtonEnableHaptic = true;
+  bool bigButtonShowFeedback = true;
+  double bigButtonPressDelayMs = 0;
+  bool bigButtonIconEnabled = true;
+
+  double textButtonWidth = 200;
+  double textButtonHeight = 50;
+  double textButtonFontSize = 16;
+  double textButtonTouchPadding = 12;
+  double textButtonPadding = 8;
+  Color textButtonColor = Colors.blue;
+  Color textButtonFontColor = Colors.white;
+  bool textButtonEnableHaptic = true;
+  bool textButtonShowFeedback = true;
+  double textButtonPressDelayMs = 0;
+  bool textButtonIconEnabled = true;
 
   double iconButtonWidth = 200;
   double iconButtonHeight = 50;
@@ -159,6 +185,25 @@ class _ComponentConfigSheetState extends State<ComponentConfigSheet> {
   bool dropdownEnableHaptic = true;
   bool dropdownShowFeedback = true;
 
+  double overviewCardHeight = 100;
+  double overviewCardTouchPadding = 4;
+  Color overviewCardColor = Colors.white;
+  Color overviewCardSurfaceTintColor = Colors.black;
+  bool overviewCardEnableHaptic = true;
+  bool overviewCardShowFeedback = true;
+  double overviewCardPressDelay = 0;
+
+  String overviewCardFeedbackText = "Cartão pressionado";
+  late TextEditingController overviewCardFeedbackController;
+
+  double taskCardPadding = 16;
+  double taskCardActionBarHeight = 48;
+  Color taskCardBackgroundColor = Colors.white;
+  Color taskCardActionBarColor = Colors.white;
+
+  double sideMenuWidth = 304;
+  Color sideMenuBackgroundColor = Colors.white;
+
   String _prefix(String c) => c.toLowerCase().replaceAll(" ", "");
 
   @override
@@ -168,7 +213,9 @@ class _ComponentConfigSheetState extends State<ComponentConfigSheet> {
     prefix = _prefix(widget.component);
     const String timePrefix = "timepicker";
     const String buttonPrefix = "button";
-    const String iconButtonPrefix = "iconButton";
+    const String bigButtonPrefix = "bigbutton";
+    const String textButtonPrefix = "textbutton";
+    const String iconButtonPrefix = "iconbutton";
     const String tabPrefix = "tabbar";
     const String alertPrefix = "alertdialog";
     const String bottomPrefix = "bottombar";
@@ -179,7 +226,10 @@ class _ComponentConfigSheetState extends State<ComponentConfigSheet> {
     const String textfieldPrefix = "textfield";
     const String linearProgressPrefix = "linearprogress";
     const String dropdownPrefix = "dropdown";
+    const String overviewCardPrefix = "overviewcard";
+    const String taskCardPrefix = "taskcard";
     final p = Provider.of<UserComponentProvider>(context, listen: false);
+    p.activeConfigComponent = widget.component.toLowerCase().replaceAll(" ", "");
 
     linearProgressHeight = p.getConfig("${linearProgressPrefix}_height") ?? linearProgressHeight;
     linearProgressWidth = p.getConfig("${linearProgressPrefix}_width") ?? linearProgressWidth;
@@ -208,6 +258,30 @@ class _ComponentConfigSheetState extends State<ComponentConfigSheet> {
     buttonShowFeedback = p.getConfig("${buttonPrefix}_showFeedback") ?? buttonShowFeedback;
     buttonPressDelayMs = p.getConfig("${buttonPrefix}_pressDelay") ?? buttonPressDelayMs;
     buttonIconEnabled = p.getConfig("${buttonPrefix}_iconEnabled") ?? buttonIconEnabled;
+
+    bigButtonWidth = p.getConfig("${bigButtonPrefix}_width") ?? bigButtonWidth;
+    bigButtonHeight = p.getConfig("${bigButtonPrefix}_height") ?? bigButtonHeight;
+    bigButtonFontSize = p.getConfig("${bigButtonPrefix}_fontSize") ?? bigButtonFontSize;
+    bigButtonTouchPadding = p.getConfig("${bigButtonPrefix}_touchPadding") ?? bigButtonTouchPadding;
+    bigButtonPadding = p.getConfig("${bigButtonPrefix}_padding") ?? bigButtonPadding;
+    bigButtonColor = p.getConfig("${bigButtonPrefix}_color") ?? bigButtonColor;
+    bigButtonFontColor = p.getConfig("${bigButtonPrefix}_fontColor") ?? bigButtonFontColor;
+    bigButtonEnableHaptic = p.getConfig("${bigButtonPrefix}_enableHaptic") ?? bigButtonEnableHaptic;
+    bigButtonShowFeedback = p.getConfig("${bigButtonPrefix}_showFeedback") ?? bigButtonShowFeedback;
+    bigButtonPressDelayMs = p.getConfig("${bigButtonPrefix}_pressDelay") ?? bigButtonPressDelayMs;
+    bigButtonIconEnabled = p.getConfig("${bigButtonPrefix}_iconEnabled") ?? bigButtonIconEnabled;
+
+    textButtonWidth = p.getConfig("${textButtonPrefix}_width") ?? textButtonWidth;
+    textButtonHeight = p.getConfig("${textButtonPrefix}_height") ?? textButtonHeight;
+    textButtonFontSize = p.getConfig("${textButtonPrefix}_fontSize") ?? textButtonFontSize;
+    textButtonTouchPadding = p.getConfig("${textButtonPrefix}_touchPadding") ?? textButtonTouchPadding;
+    textButtonPadding = p.getConfig("${textButtonPrefix}_padding") ?? textButtonPadding;
+    textButtonColor = p.getConfig("${textButtonPrefix}_color") ?? textButtonColor;
+    textButtonFontColor = p.getConfig("${textButtonPrefix}_fontColor") ?? textButtonFontColor;
+    textButtonEnableHaptic = p.getConfig("${textButtonPrefix}_enableHaptic") ?? textButtonEnableHaptic;
+    textButtonShowFeedback = p.getConfig("${textButtonPrefix}_showFeedback") ?? textButtonShowFeedback;
+    textButtonPressDelayMs = p.getConfig("${textButtonPrefix}_pressDelay") ?? textButtonPressDelayMs;
+    textButtonIconEnabled = p.getConfig("${textButtonPrefix}_iconEnabled") ?? textButtonIconEnabled;
 
     iconButtonWidth = p.getConfig("${iconButtonPrefix}_width") ?? iconButtonWidth;
     iconButtonHeight = p.getConfig("${iconButtonPrefix}_height") ?? iconButtonHeight;
@@ -328,10 +402,39 @@ class _ComponentConfigSheetState extends State<ComponentConfigSheet> {
     dropdownTouchPadding = p.getConfig("${dropdownPrefix}_touchPadding") ?? dropdownTouchPadding;
     dropdownPadding = p.getConfig("${dropdownPrefix}_padding") ?? dropdownPadding;
     dropdownColor = p.getConfig("${dropdownPrefix}_color") ?? dropdownColor;
-    dropdownListColor = p.getConfig("${dropdownPrefix}_ListColor") ?? dropdownListColor;
+    dropdownListColor = p.getConfig("${dropdownPrefix}_listColor") ?? dropdownListColor;
     dropdownEnableHaptic = p.getConfig("${dropdownPrefix}_enableHaptic") ?? dropdownEnableHaptic;
     dropdownShowFeedback = p.getConfig("${dropdownPrefix}_showFeedback") ?? dropdownShowFeedback;
     dropdownPressDelay = p.getConfig("${dropdownPrefix}_pressDelay") ?? dropdownPressDelay;
+
+    overviewCardHeight = p.getConfig("${overviewCardPrefix}_height") ?? overviewCardHeight;
+    overviewCardTouchPadding =
+        p.getConfig("${overviewCardPrefix}_touchPadding") ?? overviewCardTouchPadding;
+    overviewCardColor = p.getConfig("${overviewCardPrefix}_color") ?? overviewCardColor;
+    overviewCardSurfaceTintColor =
+        p.getConfig("${overviewCardPrefix}_surfaceTintColor") ?? overviewCardSurfaceTintColor;
+    overviewCardEnableHaptic =
+        p.getConfig("${overviewCardPrefix}_enableHaptic") ?? overviewCardEnableHaptic;
+    overviewCardShowFeedback =
+        p.getConfig("${overviewCardPrefix}_showFeedback") ?? overviewCardShowFeedback;
+    overviewCardPressDelay = p.getConfig("${overviewCardPrefix}_pressDelay") ?? overviewCardPressDelay;
+    overviewCardFeedbackText =
+        p.getConfig("${overviewCardPrefix}_feedbackText") ?? overviewCardFeedbackText;
+    overviewCardFeedbackController = TextEditingController(text: overviewCardFeedbackText);
+    taskCardPadding = p.getConfig("${taskCardPrefix}_padding") ?? taskCardPadding;
+    taskCardActionBarHeight =
+        p.getConfig("${taskCardPrefix}_actionBarHeight") ?? taskCardActionBarHeight;
+    taskCardBackgroundColor =
+        p.getConfig("${taskCardPrefix}_backgroundColor") ?? taskCardBackgroundColor;
+    taskCardActionBarColor = p.getConfig("${taskCardPrefix}_actionBarColor") ?? taskCardActionBarColor;
+    sideMenuWidth = p.getConfig('sidemenu_width') ?? sideMenuWidth;
+    sideMenuBackgroundColor = p.getConfig('sidemenu_backgroundColor') ?? sideMenuBackgroundColor;
+  }
+
+  @override
+  void dispose() {
+    overviewCardFeedbackController.dispose();
+    super.dispose();
   }
 
   @override
@@ -351,7 +454,21 @@ class _ComponentConfigSheetState extends State<ComponentConfigSheet> {
             controller: controller,
             padding: const EdgeInsets.all(16),
             children: [
-              Text(widget.component, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      assistiveComponentNamePt(widget.component),
+                      style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  IconButton(
+                    tooltip: "Fechar",
+                    onPressed: () => Navigator.of(context).maybePop(),
+                    icon: const Icon(Icons.close),
+                  ),
+                ],
+              ),
               const SizedBox(height: 16),
 
               if (widget.component == "Checkbox")
@@ -535,6 +652,116 @@ class _ComponentConfigSheetState extends State<ComponentConfigSheet> {
                     context: context,
                     value: dropdownShowFeedback,
                     onChanged: (v) => setState(() => dropdownShowFeedback = v),
+                  ),
+                ]),
+
+              if (widget.component == "Overview Card")
+                section("Overview Card", [
+                  sliderRow(
+                    label: "Height",
+                    value: overviewCardHeight,
+                    min: 40,
+                    max: 320,
+                    context: context,
+                    onChanged: (v) => setState(() => overviewCardHeight = v),
+                  ),
+                  sliderRow(
+                    label: "Touch Padding",
+                    value: overviewCardTouchPadding,
+                    min: 0,
+                    max: 40,
+                    context: context,
+                    onChanged: (v) => setState(() => overviewCardTouchPadding = v),
+                  ),
+                  colorRow(
+                    label: "Color",
+                    value: overviewCardColor,
+                    context: context,
+                    onChanged: (c) => setState(() => overviewCardColor = c),
+                  ),
+                  colorRow(
+                    label: "Surface Tint Color",
+                    value: overviewCardSurfaceTintColor,
+                    context: context,
+                    onChanged: (c) => setState(() => overviewCardSurfaceTintColor = c),
+                  ),
+                  switchRow(
+                    label: "Haptic",
+                    value: overviewCardEnableHaptic,
+                    context: context,
+                    onChanged: (v) => setState(() => overviewCardEnableHaptic = v),
+                  ),
+                  switchRow(
+                    label: "Feedback",
+                    value: overviewCardShowFeedback,
+                    context: context,
+                    onChanged: (v) => setState(() => overviewCardShowFeedback = v),
+                  ),
+                  section("Feedback Text", [
+                    TextField(
+                      controller: overviewCardFeedbackController,
+                      decoration: const InputDecoration(border: OutlineInputBorder()),
+                      onChanged: (value) => overviewCardFeedbackText = value,
+                    ),
+                  ]),
+                  sliderRow(
+                    label: "Press Delay (ms)",
+                    value: overviewCardPressDelay,
+                    min: 0,
+                    max: 1000,
+                    context: context,
+                    onChanged: (v) => setState(() => overviewCardPressDelay = v),
+                    showInt: true,
+                  ),
+                ]),
+
+              if (widget.component == "Task Card")
+                section("Task Card", [
+                  sliderRow(
+                    label: "Padding",
+                    value: taskCardPadding,
+                    min: 0,
+                    max: 48,
+                    context: context,
+                    onChanged: (v) => setState(() => taskCardPadding = v),
+                  ),
+                  sliderRow(
+                    label: "Action Bar Height",
+                    value: taskCardActionBarHeight,
+                    min: 40,
+                    max: 120,
+                    context: context,
+                    onChanged: (v) => setState(() => taskCardActionBarHeight = v),
+                  ),
+                  colorRow(
+                    label: "Background Color",
+                    value: taskCardBackgroundColor,
+                    context: context,
+                    onChanged: (c) => setState(() => taskCardBackgroundColor = c),
+                  ),
+                  colorRow(
+                    label: "Action Bar Color",
+                    value: taskCardActionBarColor,
+                    context: context,
+                    onChanged: (c) => setState(() => taskCardActionBarColor = c),
+                  ),
+                ]),
+
+              if (widget.component == "Side Menu")
+                section("Side Menu", [
+                  sliderRow(
+                    label: "Width",
+                    value: sideMenuWidth,
+                    min: 240,
+                    max: 420,
+                    context: context,
+                    onChanged: (v) => setState(() => sideMenuWidth = v),
+                  ),
+                  colorRow(
+                    label: "Background Color",
+                    value: sideMenuBackgroundColor,
+                    context: context,
+                    onChanged: (c) => setState(() => sideMenuBackgroundColor = c),
                   ),
                 ]),
 
@@ -802,6 +1029,190 @@ class _ComponentConfigSheetState extends State<ComponentConfigSheet> {
                     onChanged:
                         (c) => setState(() {
                           buttonFontColor = c;
+                        }),
+                  ),
+                ]),
+
+              if (["Big Button"].contains(widget.component))
+                section("Layout", [
+                  sliderRow(
+                    label: "Width",
+                    value: bigButtonWidth,
+                    context: context,
+                    min: 12,
+                    max: 240,
+                    onChanged: (v) => setState(() => bigButtonWidth = v),
+                  ),
+                  sliderRow(
+                    label: "Height",
+                    value: bigButtonHeight,
+                    min: 12,
+                    context: context,
+                    max: 240,
+                    onChanged: (v) => setState(() => bigButtonHeight = v),
+                  ),
+                ]),
+              if (["Big Button"].contains(widget.component))
+                section("Spacing", [
+                  sliderRow(
+                    label: "Padding",
+                    value: bigButtonPadding,
+                    context: context,
+                    min: 0,
+                    max: 36,
+                    onChanged: (v) => setState(() => bigButtonPadding = v),
+                  ),
+                  sliderRow(
+                    label: "Touch Padding",
+                    value: bigButtonTouchPadding,
+                    context: context,
+                    min: 0,
+                    max: 36,
+                    onChanged: (v) => setState(() => bigButtonTouchPadding = v),
+                  ),
+                ]),
+              if (["Big Button"].contains(widget.component))
+                section("Interaction", [
+                  sliderRow(
+                    label: "Press Delay (ms)",
+                    value: bigButtonPressDelayMs,
+                    min: 0,
+                    max: 5000,
+                    context: context,
+                    onChanged: (v) => setState(() => bigButtonPressDelayMs = v),
+                    showInt: true,
+                  ),
+                  switchRow(
+                    label: "Haptic",
+                    value: bigButtonEnableHaptic,
+                    context: context,
+                    onChanged: (v) => setState(() => bigButtonEnableHaptic = v),
+                  ),
+                  switchRow(
+                    label: "Feedback",
+                    value: bigButtonShowFeedback,
+                    context: context,
+                    onChanged: (v) => setState(() => bigButtonShowFeedback = v),
+                  ),
+                ]),
+              if (["Big Button"].contains(widget.component))
+                section("Button", [
+                  sliderRow(
+                    label: "Font Size",
+                    context: context,
+                    value: bigButtonFontSize,
+                    min: 8,
+                    max: 36,
+                    onChanged: (v) => setState(() => bigButtonFontSize = v),
+                  ),
+                  colorRow(
+                    label: "Color",
+                    context: context,
+                    value: bigButtonColor,
+                    onChanged:
+                        (c) => setState(() {
+                          bigButtonColor = c;
+                        }),
+                  ),
+                  colorRow(
+                    label: "Font Color",
+                    context: context,
+                    value: bigButtonFontColor,
+                    onChanged:
+                        (c) => setState(() {
+                          bigButtonFontColor = c;
+                        }),
+                  ),
+                ]),
+
+              if (["Text Button"].contains(widget.component))
+                section("Layout", [
+                  sliderRow(
+                    label: "Width",
+                    value: textButtonWidth,
+                    context: context,
+                    min: 12,
+                    max: 240,
+                    onChanged: (v) => setState(() => textButtonWidth = v),
+                  ),
+                  sliderRow(
+                    label: "Height",
+                    value: textButtonHeight,
+                    min: 12,
+                    context: context,
+                    max: 240,
+                    onChanged: (v) => setState(() => textButtonHeight = v),
+                  ),
+                ]),
+              if (["Text Button"].contains(widget.component))
+                section("Spacing", [
+                  sliderRow(
+                    label: "Padding",
+                    value: textButtonPadding,
+                    context: context,
+                    min: 0,
+                    max: 36,
+                    onChanged: (v) => setState(() => textButtonPadding = v),
+                  ),
+                  sliderRow(
+                    label: "Touch Padding",
+                    value: textButtonTouchPadding,
+                    context: context,
+                    min: 0,
+                    max: 36,
+                    onChanged: (v) => setState(() => textButtonTouchPadding = v),
+                  ),
+                ]),
+              if (["Text Button"].contains(widget.component))
+                section("Interaction", [
+                  sliderRow(
+                    label: "Press Delay (ms)",
+                    value: textButtonPressDelayMs,
+                    min: 0,
+                    max: 5000,
+                    context: context,
+                    onChanged: (v) => setState(() => textButtonPressDelayMs = v),
+                    showInt: true,
+                  ),
+                  switchRow(
+                    label: "Haptic",
+                    value: textButtonEnableHaptic,
+                    context: context,
+                    onChanged: (v) => setState(() => textButtonEnableHaptic = v),
+                  ),
+                  switchRow(
+                    label: "Feedback",
+                    value: textButtonShowFeedback,
+                    context: context,
+                    onChanged: (v) => setState(() => textButtonShowFeedback = v),
+                  ),
+                ]),
+              if (["Text Button"].contains(widget.component))
+                section("Button", [
+                  sliderRow(
+                    label: "Font Size",
+                    context: context,
+                    value: textButtonFontSize,
+                    min: 8,
+                    max: 36,
+                    onChanged: (v) => setState(() => textButtonFontSize = v),
+                  ),
+                  colorRow(
+                    label: "Color",
+                    context: context,
+                    value: textButtonColor,
+                    onChanged:
+                        (c) => setState(() {
+                          textButtonColor = c;
+                        }),
+                  ),
+                  colorRow(
+                    label: "Font Color",
+                    context: context,
+                    value: textButtonFontColor,
+                    onChanged:
+                        (c) => setState(() {
+                          textButtonFontColor = c;
                         }),
                   ),
                 ]),
@@ -1160,6 +1571,17 @@ class _ComponentConfigSheetState extends State<ComponentConfigSheet> {
                     context: context,
                     onChanged: (v) => setState(() => alertDialogShowFeedback = v),
                   ),
+                  sliderRow(
+                    label: "Press Delay (ms)",
+                    value: alertDialogPressDelay.inMilliseconds.toDouble(),
+                    min: 0,
+                    max: 2000,
+                    context: context,
+                    onChanged: (v) => setState(
+                      () => alertDialogPressDelay = Duration(milliseconds: v.toInt()),
+                    ),
+                    showInt: true,
+                  ),
                 ]),
               if (widget.component == "Alert Dialog")
                 section("Confirm Button", [
@@ -1310,6 +1732,14 @@ class _ComponentConfigSheetState extends State<ComponentConfigSheet> {
                 ]),
 
               saveButton(() {
+                for (final componentPrefix in presetScalableComponentPrefixes) {
+                  if (componentPrefix == prefix) {
+                    p.setConfig('${componentPrefix}_$presetSizeMultiplierProperty', 1.0);
+                  }
+                }
+                p.setConfig('activePreset', 'custom');
+                p.configWriteComponent = prefix;
+
                 p.setConfig("linearprogress_borderRadius", linearProgressBorderRadius);
                 p.setConfig("linearprogress_animationDuration", linearProgressAnimationDuration);
                 p.setConfig("linearprogress_valueColor", linearProgressValueColor);
@@ -1331,6 +1761,28 @@ class _ComponentConfigSheetState extends State<ComponentConfigSheet> {
                 p.setConfig("button_pressDelay", buttonPressDelayMs);
                 p.setConfig("button_enableHaptic", buttonEnableHaptic);
                 p.setConfig("button_showFeedback", buttonShowFeedback);
+
+                p.setConfig("bigbutton_width", bigButtonWidth);
+                p.setConfig("bigbutton_height", bigButtonHeight);
+                p.setConfig("bigbutton_padding", bigButtonPadding);
+                p.setConfig("bigbutton_touchPadding", bigButtonTouchPadding);
+                p.setConfig("bigbutton_fontSize", bigButtonFontSize);
+                p.setConfig("bigbutton_color", bigButtonColor);
+                p.setConfig("bigbutton_fontColor", bigButtonFontColor);
+                p.setConfig("bigbutton_pressDelay", bigButtonPressDelayMs);
+                p.setConfig("bigbutton_enableHaptic", bigButtonEnableHaptic);
+                p.setConfig("bigbutton_showFeedback", bigButtonShowFeedback);
+
+                p.setConfig("textbutton_width", textButtonWidth);
+                p.setConfig("textbutton_height", textButtonHeight);
+                p.setConfig("textbutton_padding", textButtonPadding);
+                p.setConfig("textbutton_touchPadding", textButtonTouchPadding);
+                p.setConfig("textbutton_fontSize", textButtonFontSize);
+                p.setConfig("textbutton_color", textButtonColor);
+                p.setConfig("textbutton_fontColor", textButtonFontColor);
+                p.setConfig("textbutton_pressDelay", textButtonPressDelayMs);
+                p.setConfig("textbutton_enableHaptic", textButtonEnableHaptic);
+                p.setConfig("textbutton_showFeedback", textButtonShowFeedback);
 
                 p.setConfig("iconbutton_width", iconButtonWidth);
                 p.setConfig("iconbutton_height", iconButtonHeight);
@@ -1445,6 +1897,24 @@ class _ComponentConfigSheetState extends State<ComponentConfigSheet> {
                 p.setConfig("dropdown_showFeedback", dropdownShowFeedback);
                 p.setConfig("dropdown_pressDelay", dropdownPressDelay);
 
+                p.setConfig("overviewcard_height", overviewCardHeight);
+                p.setConfig("overviewcard_touchPadding", overviewCardTouchPadding);
+                p.setConfig("overviewcard_color", overviewCardColor);
+                p.setConfig("overviewcard_surfaceTintColor", overviewCardSurfaceTintColor);
+                p.setConfig("overviewcard_enableHaptic", overviewCardEnableHaptic);
+                p.setConfig("overviewcard_showFeedback", overviewCardShowFeedback);
+                p.setConfig("overviewcard_pressDelay", overviewCardPressDelay);
+                p.setConfig("overviewcard_feedbackText", overviewCardFeedbackText);
+
+                p.setConfig("taskcard_padding", taskCardPadding);
+                p.setConfig("taskcard_actionBarHeight", taskCardActionBarHeight);
+                p.setConfig("taskcard_backgroundColor", taskCardBackgroundColor);
+                p.setConfig("taskcard_actionBarColor", taskCardActionBarColor);
+
+                p.setConfig('sidemenu_width', sideMenuWidth);
+                p.setConfig('sidemenu_backgroundColor', sideMenuBackgroundColor);
+
+                p.configWriteComponent = null;
                 Navigator.pop(context);
               }),
             ],

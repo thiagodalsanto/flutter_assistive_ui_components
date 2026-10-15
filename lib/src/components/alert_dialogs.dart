@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_assistive_ui_components/src/helpers/preset_size_multiplier.dart';
 import 'package:flutter_assistive_ui_components/src/internal/floating_feedback.dart';
 import 'package:flutter_assistive_ui_components/src/providers/providers.dart';
 
@@ -12,6 +13,9 @@ class AssistiveUIAlertDialog extends StatefulWidget {
   final String confirmText;
   final String cancelText;
   final String? feedbackText;
+  final Widget? contentWidget;
+  final List<Widget>? actions;
+  final WrapAlignment actionsAlignment;
   final Color titleColor;
   final Color contentColor;
   final Color backgroundColor;
@@ -38,11 +42,14 @@ class AssistiveUIAlertDialog extends StatefulWidget {
 
   const AssistiveUIAlertDialog({
     super.key,
-    this.title = "Title",
-    this.content = "Content",
-    this.confirmText = "OK",
-    this.cancelText = "Cancel",
+    this.title = "Título",
+    this.content = "Conteúdo",
+    this.confirmText = "Confirmar",
+    this.cancelText = "Cancelar",
     this.feedbackText,
+    this.contentWidget,
+    this.actions,
+    this.actionsAlignment = WrapAlignment.end,
     this.onConfirm,
     this.onCancel,
     this.width = 300,
@@ -83,8 +90,8 @@ class _AssistiveUIAlertDialogState extends State<AssistiveUIAlertDialog> {
   late Color contentColor;
   late bool enableHaptic;
   late bool showFeedback;
-  late String? feedbackText;
-  late Duration pressDelay;
+  String? feedbackText;
+  Duration pressDelay = Duration.zero;
   late double confirmWidth;
   late double confirmHeight;
   late double confirmBorderRadius;
@@ -102,24 +109,29 @@ class _AssistiveUIAlertDialogState extends State<AssistiveUIAlertDialog> {
 
     final provider = context.watch<UserComponentProvider>();
 
-    width = provider.getConfig<double>("${prefix}_width") ?? widget.width;
-    padding = provider.getConfig<double>("${prefix}_padding") ?? widget.padding;
+    width = getScaledPresetConfig(provider, prefix, 'width', widget.width)
+        .clamp(0.0, MediaQuery.sizeOf(context).width - 32);
+    padding = getScaledPresetConfig(provider, prefix, 'padding', widget.padding);
     borderRadius = provider.getConfig<double>("${prefix}_borderRadius") ?? widget.borderRadius;
     backgroundColor = provider.getConfig<Color>("${prefix}_backgroundColor") ?? widget.backgroundColor;
     titleColor = provider.getConfig<Color>("${prefix}_titleColor") ?? widget.titleColor;
     contentColor = provider.getConfig<Color>("${prefix}_contentColor") ?? widget.contentColor;
     enableHaptic = provider.getConfig<bool>("${prefix}_enableHaptic") ?? widget.enableHaptic;
     showFeedback = provider.getConfig<bool>("${prefix}_showFeedback") ?? widget.showFeedback;
-    confirmWidth = provider.getConfig<double>("${prefix}_confirmWidth") ?? widget.confirmWidth;
-    confirmHeight = provider.getConfig<double>("${prefix}_confirmHeight") ?? widget.confirmHeight;
+    feedbackText = provider.getConfig<String>("${prefix}_feedbackText") ?? widget.feedbackText;
+    final pressDelayMs =
+        provider.getConfig<num>("${prefix}_pressDelay")?.toInt() ?? widget.pressDelay.inMilliseconds;
+    pressDelay = Duration(milliseconds: pressDelayMs);
+    confirmWidth = getScaledPresetConfig(provider, prefix, 'confirmWidth', widget.confirmWidth);
+    confirmHeight = getScaledPresetConfig(provider, prefix, 'confirmHeight', widget.confirmHeight);
     confirmBorderRadius =
         provider.getConfig<double>("${prefix}_confirmRadius") ?? widget.confirmBorderRadius;
     confirmBackgroundColor =
         provider.getConfig<Color>("${prefix}_confirmBg") ?? widget.confirmBackgroundColor;
     confirmTextColor =
         provider.getConfig<Color>("${prefix}_confirmTextColor") ?? widget.confirmTextColor;
-    cancelWidth = provider.getConfig<double>("${prefix}_cancelWidth") ?? widget.cancelWidth;
-    cancelHeight = provider.getConfig<double>("${prefix}_cancelHeight") ?? widget.cancelHeight;
+    cancelWidth = getScaledPresetConfig(provider, prefix, 'cancelWidth', widget.cancelWidth);
+    cancelHeight = getScaledPresetConfig(provider, prefix, 'cancelHeight', widget.cancelHeight);
     cancelBorderRadius =
         provider.getConfig<double>("${prefix}_cancelRadius") ?? widget.cancelBorderRadius;
     cancelBackgroundColor =
@@ -137,7 +149,7 @@ class _AssistiveUIAlertDialogState extends State<AssistiveUIAlertDialog> {
     }
 
     if (showFeedback) {
-      showFloatingFeedback(context, feedbackText ?? "Cancelled");
+      showFloatingFeedback(context, feedbackText ?? "Cancelado");
     }
 
     if (!mounted) return;
@@ -155,7 +167,7 @@ class _AssistiveUIAlertDialogState extends State<AssistiveUIAlertDialog> {
     }
 
     if (showFeedback) {
-      showFloatingFeedback(context, feedbackText ?? "Confirmed");
+      showFloatingFeedback(context, feedbackText ?? "Confirmado");
     }
 
     if (!mounted) return;
@@ -191,62 +203,88 @@ class _AssistiveUIAlertDialogState extends State<AssistiveUIAlertDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        width: width,
-        padding: EdgeInsets.all(padding),
-        decoration: BoxDecoration(
-          color: backgroundColor,
-          borderRadius: BorderRadius.circular(borderRadius),
-          boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 10, offset: Offset(0, 4))],
-        ),
-        child: Material(
-          color: Colors.transparent,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                widget.title,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: titleColor,
-                  fontStyle: widget.titleStyle,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                widget.content,
-                style: TextStyle(fontSize: 14, color: contentColor, fontStyle: widget.contentStyle),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
+    final theme = Theme.of(context);
+
+    return Dialog(
+      backgroundColor: backgroundColor,
+      insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius)),
+      elevation: 12,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: width),
+        child: SizedBox(
+          width: width,
+          child: Padding(
+            padding: EdgeInsets.all(padding),
+            child: Material(
+              color: Colors.transparent,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildButton(
-                    text: widget.cancelText,
-                    width: cancelWidth,
-                    height: cancelHeight,
-                    radius: cancelBorderRadius,
-                    bgColor: cancelBackgroundColor,
-                    textColor: cancelTextColor,
-                    onTap: _handleCancel,
+                Text(
+                  widget.title,
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.w700,
+                    color: titleColor,
+                    fontStyle: widget.titleStyle,
                   ),
-                  const SizedBox(width: 10),
-                  _buildButton(
-                    text: widget.confirmText,
-                    width: confirmWidth,
-                    height: confirmHeight,
-                    radius: confirmBorderRadius,
-                    bgColor: confirmBackgroundColor,
-                    textColor: confirmTextColor,
-                    onTap: _handleConfirm,
+                ),
+                const SizedBox(height: 20),
+                if (widget.contentWidget case final content?)
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxHeight: MediaQuery.sizeOf(context).height * 0.6,
+                    ),
+                    child: SingleChildScrollView(child: content),
+                  )
+                else
+                  Text(
+                    widget.content,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: contentColor,
+                      fontStyle: widget.contentStyle,
+                    ),
+                  ),
+                const SizedBox(height: 20),
+                Divider(height: 1, color: theme.colorScheme.outlineVariant),
+                const SizedBox(height: 12),
+                if (widget.actions case final actions?)
+                  Wrap(
+                    alignment: widget.actionsAlignment,
+                    spacing: 8,
+                    runSpacing: 4,
+                    children: actions,
+                  )
+                else
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      _buildButton(
+                        text: widget.cancelText,
+                        width: cancelWidth,
+                        height: cancelHeight,
+                        radius: cancelBorderRadius,
+                        bgColor: cancelBackgroundColor,
+                        textColor: cancelTextColor,
+                        onTap: _handleCancel,
+                      ),
+                      const SizedBox(width: 10),
+                      _buildButton(
+                        text: widget.confirmText,
+                        width: confirmWidth,
+                        height: confirmHeight,
+                        radius: confirmBorderRadius,
+                        bgColor: confirmBackgroundColor,
+                        textColor: confirmTextColor,
+                        onTap: _handleConfirm,
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
+            ),
           ),
         ),
       ),

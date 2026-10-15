@@ -4,6 +4,7 @@ import 'package:flutter_assistive_ui_components/src/models/models.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_assistive_ui_components/src/helpers/preset_size_multiplier.dart';
 import 'package:flutter_assistive_ui_components/src/internal/floating_feedback.dart';
 import 'package:flutter_assistive_ui_components/src/providers/providers.dart';
 
@@ -60,7 +61,7 @@ class _AssistiveUITabBarState extends State<AssistiveUITabBar> {
     widget.onChanged?.call(index);
 
     if (showFeedback) {
-      showFloatingFeedback(context, "Tab: ${widget.items[index].label}");
+      showFloatingFeedback(context, "Aba: ${widget.items[index].label}");
     }
   }
 
@@ -68,8 +69,8 @@ class _AssistiveUITabBarState extends State<AssistiveUITabBar> {
   Widget build(BuildContext context) {
     final p = context.watch<UserComponentProvider>();
 
-    final height = p.getConfig<double>("${prefix}_height") ?? widget.height;
-    final padding = p.getConfig<double>("${prefix}_padding") ?? widget.padding;
+    final height = getScaledPresetConfig(p, prefix, 'height', widget.height);
+    final padding = getScaledPresetConfig(p, prefix, 'padding', widget.padding);
     final backgroundColor = p.getConfig<Color>("${prefix}_backgroundColor") ?? Colors.white;
     final inactiveColor = p.getConfig<Color>("${prefix}_inactiveColor") ?? Colors.grey;
     final enableHaptic = p.getConfig<bool>("${prefix}_enableHaptic") ?? widget.enableHaptic;

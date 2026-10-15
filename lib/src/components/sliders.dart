@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_assistive_ui_components/src/helpers/preset_size_multiplier.dart';
 import 'package:flutter_assistive_ui_components/src/internal/floating_feedback.dart';
 import 'package:flutter_assistive_ui_components/src/providers/providers.dart';
 
@@ -76,7 +77,7 @@ class _AssistiveUISliderState extends State<AssistiveUISlider> {
     }
 
     if (showFeedback) {
-      showFloatingFeedback(context, "Value: ${v.toStringAsFixed(2)}");
+      showFloatingFeedback(context, "Valor: ${v.toStringAsFixed(2)}");
     }
   }
 
@@ -99,10 +100,10 @@ class _AssistiveUISliderState extends State<AssistiveUISlider> {
   Widget build(BuildContext context) {
     final provider = context.watch<UserComponentProvider>();
 
-    final width = provider.getConfig<double>("${prefix}_width") ?? widget.width;
-    final height = provider.getConfig<double>("${prefix}_height") ?? widget.height;
-    final padding = provider.getConfig<double>("${prefix}_padding") ?? widget.padding;
-    final touchPadding = provider.getConfig<double>("${prefix}_touchPadding") ?? widget.touchPadding;
+    final width = getScaledPresetConfig(provider, prefix, 'width', widget.width);
+    final height = getScaledPresetConfig(provider, prefix, 'height', widget.height);
+    final padding = getScaledPresetConfig(provider, prefix, 'padding', widget.padding);
+    final touchPadding = getScaledPresetConfig(provider, prefix, 'touchPadding', widget.touchPadding);
     final activeColor = provider.getConfig<Color>("${prefix}_activeColor") ?? widget.activeColor;
     final inactiveColor = provider.getConfig<Color>("${prefix}_inactiveColor") ?? widget.inactiveColor;
 

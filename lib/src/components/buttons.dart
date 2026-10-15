@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_assistive_ui_components/src/components/base/interactive_state_mixin.dart';
+import 'package:flutter_assistive_ui_components/src/helpers/preset_size_multiplier.dart';
 import 'package:flutter_assistive_ui_components/src/providers/providers.dart';
 
 /// Custom Button Component
@@ -25,12 +26,17 @@ class AssistiveUIButton extends StatefulWidget {
   final bool showFeedback;
   final String feedbackText;
   final Color fontColor;
+  final Color color;
+  final bool swapIconLabel;
+  final bool iconEnabled;
+  final int elevation;
 
   const AssistiveUIButton({
     super.key,
     required this.label,
     required this.onPressed,
     this.fontColor = Colors.white,
+    this.color = Colors.blue,
     this.size = const Size(200, 56),
     this.fontSize = 16,
     this.touchPadding = 16,
@@ -39,7 +45,10 @@ class AssistiveUIButton extends StatefulWidget {
     this.enableHaptic = false,
     this.hapticDuration = const Duration(milliseconds: 30),
     this.showFeedback = false,
-    this.feedbackText = "Button pressed",
+    this.feedbackText = "Botão pressionado",
+    this.swapIconLabel = false,
+    this.iconEnabled = true,
+    this.elevation = 0,
     this.icon,
   });
 
@@ -75,19 +84,19 @@ class _AssistiveUIButtonState extends State<AssistiveUIButton>
   Widget build(BuildContext context) {
     final provider = context.watch<UserComponentProvider>();
 
-    final width = provider.getConfig<double>("${prefix}_width") ?? widget.size.width;
-    final height = provider.getConfig<double>("${prefix}_height") ?? widget.size.height;
-    final fontSize = provider.getConfig<double>("${prefix}_fontSize") ?? widget.fontSize;
-    final touchPadding = provider.getConfig<double>("${prefix}_touchPadding") ?? widget.touchPadding;
-    final padding = provider.getConfig<double>("${prefix}_padding") ?? widget.padding;
-    final color = provider.getConfig<Color>("${prefix}_color") ?? Colors.blue;
+    final width = getScaledPresetConfig(provider, prefix, 'width', widget.size.width);
+    final height = getScaledPresetConfig(provider, prefix, 'height', widget.size.height);
+    final fontSize = getScaledPresetConfig(provider, prefix, 'fontSize', widget.fontSize);
+    final touchPadding = getScaledPresetConfig(provider, prefix, 'touchPadding', widget.touchPadding);
+    final padding = getScaledPresetConfig(provider, prefix, 'padding', widget.padding);
+    final color = provider.getConfig<Color>("${prefix}_color") ?? widget.color;
     final fontColor = provider.getConfig<Color>("${prefix}_fontColor") ?? widget.fontColor;
     final enableHaptic = provider.getConfig<bool>("${prefix}_enableHaptic") ?? widget.enableHaptic;
     final showFeedback = provider.getConfig<bool>("${prefix}_showFeedback") ?? widget.showFeedback;
     final feedbackText = provider.getConfig<String>("${prefix}_feedbackText") ?? widget.feedbackText;
     final pressDelayMs = provider.getConfig<double>("${prefix}_pressDelay") ?? 0;
     final pressDelay = Duration(milliseconds: pressDelayMs.toInt());
-    final iconEnabled = provider.getConfig<bool>("${prefix}_iconEnabled") ?? true;
+    final iconEnabled = provider.getConfig<bool>("${prefix}_iconEnabled") ?? widget.iconEnabled;
     final icon = provider.getConfig<IconData>("${prefix}_icon") ?? widget.icon;
 
     return GestureDetector(
@@ -110,7 +119,7 @@ class _AssistiveUIButtonState extends State<AssistiveUIButton>
           height: height,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              elevation: 0,
+              elevation: widget.elevation.toDouble(),
               backgroundColor: color,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               padding: EdgeInsets.symmetric(horizontal: padding),
@@ -137,16 +146,30 @@ class _AssistiveUIButtonState extends State<AssistiveUIButton>
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          if (icon != null && iconEnabled) ...[Icon(icon), const SizedBox(width: 6)],
-                          ConstrainedBox(
-                            constraints: BoxConstraints(maxWidth: constraints.maxWidth * 0.8),
-                            child: Text(
-                              widget.label,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              softWrap: false,
+                          if (widget.swapIconLabel && icon != null && iconEnabled) ...[
+                            ConstrainedBox(
+                              constraints: BoxConstraints(maxWidth: constraints.maxWidth * 0.8),
+                              child: Text(
+                                widget.label,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                softWrap: false,
+                              ),
                             ),
-                          ),
+                            const SizedBox(width: 6),
+                            Icon(icon),
+                          ] else if (widget.swapIconLabel == false) ...[
+                            if (icon != null && iconEnabled) ...[Icon(icon), const SizedBox(width: 6)],
+                            ConstrainedBox(
+                              constraints: BoxConstraints(maxWidth: constraints.maxWidth * 0.8),
+                              child: Text(
+                                widget.label,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                softWrap: false,
+                              ),
+                            ),
+                          ],
                         ],
                       ),
                     ),

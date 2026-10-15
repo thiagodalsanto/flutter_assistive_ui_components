@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:flutter_assistive_ui_components/src/internal/assistive_text_pt.dart';
 
 /// Builder consolidado para linhas de configuração repetitivas.
 ///
@@ -32,7 +33,10 @@ class ConfigRowBuilder {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: const TextStyle(fontSize: _labelFontSize, fontWeight: FontWeight.w500)),
+          Text(
+            assistiveConfigLabelPt(label),
+            style: const TextStyle(fontSize: _labelFontSize, fontWeight: FontWeight.w500),
+          ),
           const SizedBox(height: _spacingBetweenLabelAndWidget),
           ...children,
         ],
@@ -152,7 +156,7 @@ class ConfigRowBuilder {
         isExpanded: true,
         items:
             options.map((String option) {
-              return DropdownMenuItem<String>(value: option, child: Text(option));
+              return DropdownMenuItem<String>(value: option, child: Text(assistiveConfigLabelPt(option)));
             }).toList(),
         onChanged: onChanged,
       ),
@@ -172,7 +176,7 @@ class ConfigRowBuilder {
         controller: TextEditingController(text: value),
         onChanged: onChanged,
         decoration: InputDecoration(
-          hintText: hintText,
+          hintText: assistiveConfigLabelPt(hintText),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
         ),
         maxLines: maxLines,

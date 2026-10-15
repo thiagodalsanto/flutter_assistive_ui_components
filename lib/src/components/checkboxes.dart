@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_assistive_ui_components/src/components/base/interactive_state_mixin.dart';
+import 'package:flutter_assistive_ui_components/src/helpers/preset_size_multiplier.dart';
 import 'package:flutter_assistive_ui_components/src/providers/providers.dart';
 
 /// Custom Checkbox Component
@@ -39,8 +40,8 @@ class AssistiveUICheckbox extends StatefulWidget {
     this.pressDelay = Duration.zero,
     this.hapticDuration = const Duration(milliseconds: 30),
     this.showFeedback = false,
-    this.feedbackTextOnCheck = "Checked",
-    this.feedbackTextOnUncheck = "Unchecked",
+    this.feedbackTextOnCheck = "Marcado",
+    this.feedbackTextOnUncheck = "Desmarcado",
   });
 
   @override
@@ -85,8 +86,8 @@ class _AssistiveUICheckboxState extends State<AssistiveUICheckbox>
     final provider = context.watch<UserComponentProvider>();
 
     final scale = provider.getConfig<double>("${prefix}_scale") ?? widget.scale;
-    final padding = provider.getConfig<double>("${prefix}_padding") ?? widget.padding;
-    final touchPadding = provider.getConfig<double>("${prefix}_touchPadding") ?? widget.touchPadding;
+    final padding = getScaledPresetConfig(provider, prefix, 'padding', widget.padding);
+    final touchPadding = getScaledPresetConfig(provider, prefix, 'touchPadding', widget.touchPadding);
     final color = provider.getConfig<Color>("${prefix}_color") ?? widget.color;
     final enableHaptic = provider.getConfig<bool>("${prefix}_enableHaptic") ?? widget.enableHaptic;
     final showFeedback = provider.getConfig<bool>("${prefix}_showFeedback") ?? widget.showFeedback;

@@ -3,6 +3,7 @@
 import 'package:flutter_assistive_ui_components/src/internal/assistive_button/component_selection_sheet/get_icon.dart';
 import 'package:flutter_assistive_ui_components/src/internal/assistive_button/component_selection_sheet/modern_button.dart';
 import 'package:flutter_assistive_ui_components/src/internal/assistive_button/component_selection_sheet/open_config_sheet.dart';
+import 'package:flutter_assistive_ui_components/src/internal/assistive_text_pt.dart';
 import 'package:flutter/material.dart';
 
 /// =======================================================
@@ -26,6 +27,8 @@ class ComponentSelectionSheet extends StatelessWidget {
 
   static const components = [
     "Button",
+    "Big Button",
+    "Text Button",
     "Icon Button",
     "Checkbox",
     "Dropdown",
@@ -36,6 +39,9 @@ class ComponentSelectionSheet extends StatelessWidget {
     "Linear Progress",
     "Time Picker",
     "Tab Bar",
+    "Overview Card",
+    "Task Card",
+    "Side Menu",
     "Alert Dialog",
     "Bottom Bar",
   ];
@@ -66,12 +72,20 @@ class ComponentSelectionSheet extends StatelessWidget {
                 ),
               ),
 
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Select Component",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
-                ),
+              Row(
+                children: [
+                  const Expanded(
+                    child: Text(
+                      "Selecionar componente",
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                  IconButton(
+                    tooltip: "Fechar",
+                    onPressed: () => Navigator.of(context).maybePop(),
+                    icon: const Icon(Icons.close),
+                  ),
+                ],
               ),
 
               const SizedBox(height: 20),
@@ -84,7 +98,7 @@ class ComponentSelectionSheet extends StatelessWidget {
                     final comp = components[index];
                     return modernButton(
                       context,
-                      label: comp,
+                      label: assistiveComponentNamePt(comp),
                       icon: getIcon(comp),
                       onTap: () {
                         Navigator.pop(context);

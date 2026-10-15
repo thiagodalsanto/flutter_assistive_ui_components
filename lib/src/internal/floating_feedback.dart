@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_assistive_ui_components/src/internal/assistive_text_pt.dart';
 
 void showFloatingFeedback(BuildContext context, String message, {double bottom = 50}) {
   final overlay = Overlay.of(context);
+  final localizedMessage = assistiveFeedbackPt(message);
 
   final overlayEntry = OverlayEntry(
     builder:
@@ -20,7 +22,7 @@ void showFloatingFeedback(BuildContext context, String message, {double bottom =
                 boxShadow: const [BoxShadow(color: Colors.black38, blurRadius: 8, offset: Offset(0, 4))],
               ),
               child: Text(
-                message,
+                localizedMessage,
                 textAlign: TextAlign.center,
                 style: const TextStyle(color: Colors.white, fontSize: 16),
               ),

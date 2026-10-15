@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+import 'package:flutter_assistive_ui_components/src/helpers/preset_size_multiplier.dart';
 import 'package:flutter_assistive_ui_components/src/internal/floating_feedback.dart';
 import 'package:flutter_assistive_ui_components/src/providers/providers.dart';
 
@@ -74,7 +75,7 @@ class _AssistiveUIBottomBarState extends State<AssistiveUIBottomBar> {
     widget.onChanged?.call(index);
 
     if (showFeedback) {
-      showFloatingFeedback(context, "Tab changed", bottom: 80);
+      showFloatingFeedback(context, "Aba alterada", bottom: 80);
     }
   }
 
@@ -90,11 +91,19 @@ class _AssistiveUIBottomBarState extends State<AssistiveUIBottomBar> {
     final pressDelayMs = provider.getConfig<double>("${prefix}_pressDelay") ?? 0;
     final pressDelay = Duration(milliseconds: pressDelayMs.toInt());
     final opacity = provider.getConfig<double>("${prefix}_opacity") ?? widget.selectedColorOpacity;
-    final itemPaddingVertical =
-        provider.getConfig<double>("${prefix}_itemPaddingVertical") ?? widget.itemPaddingVertical;
-    final itemPaddingHorizontal =
-        provider.getConfig<double>("${prefix}_itemPaddingHorizontal") ?? widget.itemPaddingHorizontal;
-    final margin = provider.getConfig<double>("${prefix}_margin") ?? widget.margin;
+    final itemPaddingVertical = getScaledPresetConfig(
+      provider,
+      prefix,
+      'itemPaddingVertical',
+      widget.itemPaddingVertical,
+    );
+    final itemPaddingHorizontal = getScaledPresetConfig(
+      provider,
+      prefix,
+      'itemPaddingHorizontal',
+      widget.itemPaddingHorizontal,
+    );
+    final margin = getScaledPresetConfig(provider, prefix, 'margin', widget.margin);
 
     return Container(
       margin: EdgeInsets.all(margin),

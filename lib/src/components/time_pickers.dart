@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_assistive_ui_components/src/helpers/preset_size_multiplier.dart';
 import 'package:flutter_assistive_ui_components/src/internal/floating_feedback.dart';
 import 'package:flutter_assistive_ui_components/src/providers/providers.dart';
 
@@ -38,7 +39,7 @@ class AssistiveUITimePicker extends StatefulWidget {
     super.key,
     this.value,
     this.onChanged,
-    this.label = "Select Time",
+    this.label = "Selecionar horário",
     this.width = 200,
     this.height = 56,
     this.fontSize = 16,
@@ -89,7 +90,7 @@ class _AssistiveUITimePickerState extends State<AssistiveUITimePicker> {
       widget.onChanged?.call(picked);
 
       if (showFeedback) {
-        showFloatingFeedback(context, "Time selected: ${picked.format(context)}");
+        showFloatingFeedback(context, "Horário selecionado: ${picked.format(context)}");
       }
     }
   }
@@ -98,11 +99,11 @@ class _AssistiveUITimePickerState extends State<AssistiveUITimePicker> {
   Widget build(BuildContext context) {
     final provider = context.watch<UserComponentProvider>();
 
-    final width = provider.getConfig<double>("${prefix}_width") ?? widget.width;
-    final height = provider.getConfig<double>("${prefix}_height") ?? widget.height;
-    final touchPadding = provider.getConfig<double>("${prefix}_touchPadding") ?? widget.touchPadding;
-    final fontSize = provider.getConfig<double>("${prefix}_fontSize") ?? widget.fontSize;
-    final padding = provider.getConfig<double>("${prefix}_padding") ?? widget.padding;
+    final width = getScaledPresetConfig(provider, prefix, 'width', widget.width);
+    final height = getScaledPresetConfig(provider, prefix, 'height', widget.height);
+    final touchPadding = getScaledPresetConfig(provider, prefix, 'touchPadding', widget.touchPadding);
+    final fontSize = getScaledPresetConfig(provider, prefix, 'fontSize', widget.fontSize);
+    final padding = getScaledPresetConfig(provider, prefix, 'padding', widget.padding);
     final color = provider.getConfig<Color>("${prefix}_color") ?? widget.color;
     final fontColor = provider.getConfig<Color>("${prefix}_fontColor") ?? widget.fontColor;
     final enableHaptic = provider.getConfig<bool>("${prefix}_enableHaptic") ?? widget.enableHaptic;

@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_assistive_ui_components/src/helpers/preset_size_multiplier.dart';
 import 'package:flutter_assistive_ui_components/src/internal/floating_feedback.dart';
 import 'package:flutter_assistive_ui_components/src/providers/providers.dart';
 
@@ -51,7 +52,7 @@ class AssistiveUIIconButton extends StatefulWidget {
     this.enableHaptic = true,
     this.hapticDuration = const Duration(milliseconds: 0),
     this.showFeedback = true,
-    this.feedbackText = "Icon button pressed",
+    this.feedbackText = "Botão com ícone pressionado",
   });
 
   @override
@@ -95,11 +96,11 @@ class _AssistiveUIIconButtonState extends State<AssistiveUIIconButton> {
   Widget build(BuildContext context) {
     final provider = context.watch<UserComponentProvider>();
 
-    final width = provider.getConfig<double>("${prefix}_width") ?? widget.size.width;
-    final height = provider.getConfig<double>("${prefix}_height") ?? widget.size.height;
-    final iconSize = provider.getConfig<double>("${prefix}_iconSize") ?? widget.iconSize;
-    final touchPadding = provider.getConfig<double>("${prefix}_touchPadding") ?? widget.touchPadding;
-    final padding = provider.getConfig<double>("${prefix}_padding") ?? widget.padding;
+    final width = getScaledPresetConfig(provider, prefix, 'width', widget.size.width);
+    final height = getScaledPresetConfig(provider, prefix, 'height', widget.size.height);
+    final iconSize = getScaledPresetConfig(provider, prefix, 'iconSize', widget.iconSize);
+    final touchPadding = getScaledPresetConfig(provider, prefix, 'touchPadding', widget.touchPadding);
+    final padding = getScaledPresetConfig(provider, prefix, 'padding', widget.padding);
     final iconColor = provider.getConfig<Color>("${prefix}_iconColor") ?? widget.iconColor;
     final color = provider.getConfig<Color>("${prefix}_color") ?? widget.color;
     final enableHaptic = provider.getConfig<bool>("${prefix}_enableHaptic") ?? widget.enableHaptic;

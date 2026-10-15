@@ -32,6 +32,8 @@ class ComponentPreset {
   final Color? borderColor;
   final Color? labelColor;
   final Color? backgroundColor;
+  final Color? surfaceTintColor;
+  final String? feedbackText;
   final Color? titleColor;
   final Color? contentColor;
   final FontStyle? titleStyle;
@@ -91,6 +93,8 @@ class ComponentPreset {
     this.confirmBorderRadius,
     this.confirmBackgroundColor,
     this.confirmTextColor,
+    this.surfaceTintColor,
+    this.feedbackText,
     this.cancelWidth,
     this.cancelHeight,
     this.cancelBorderRadius,

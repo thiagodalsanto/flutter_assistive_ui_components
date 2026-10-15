@@ -32,6 +32,8 @@ void applyPresetMap(UserComponentProvider p, Map<String, ComponentPreset> preset
     _applyProperty(p, key, 'labelColor', preset.labelColor);
     _applyProperty(p, key, 'borderColor', preset.borderColor);
     _applyProperty(p, key, 'backgroundColor', preset.backgroundColor);
+    _applyProperty(p, key, 'surfaceTintColor', preset.surfaceTintColor);
+    _applyProperty(p, key, 'feedbackText', preset.feedbackText);
     _applyProperty(p, key, 'titleColor', preset.titleColor);
     _applyProperty(p, key, 'contentColor', preset.contentColor);
     _applyProperty(p, key, 'titleStyle', preset.titleStyle);

@@ -1,66 +1,65 @@
-import 'package:flutter_assistive_ui_components/src/models/models.dart';
-import 'package:flutter_assistive_ui_components/src/helpers/preset_mapper.dart';
-import 'package:flutter_assistive_ui_components/src/presets/base_values.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_assistive_ui_components/src/helpers/preset_mapper.dart';
+import 'package:flutter_assistive_ui_components/src/helpers/preset_size_multiplier.dart';
+import 'package:flutter_assistive_ui_components/src/models/models.dart';
+import 'package:flutter_assistive_ui_components/src/presets/base_values.dart';
 import 'package:flutter_assistive_ui_components/src/providers/providers.dart';
 
 void applyAphasia(UserComponentProvider p) {
   const defaultAphasiaColor = Colors.deepPurple;
 
+  applyPresetSizeMultiplier(p, 1.2);
+
   applyPresetMap(p, {
+    "Action Menu": ComponentPreset(
+      pressDelay: PresetDefaults.defaultPressDelayAphasia,
+      enableHaptic: !PresetDefaults.defaultMultiModalFeedback,
+      showFeedback: !PresetDefaults.defaultMultiModalFeedback,
+    ),
     "Button": ComponentPreset(
-      width: PresetDefaults.buttonDefaultWidth * 1.2,
-      height: PresetDefaults.buttonDefaultHeight * 1.2,
-      fontSize: PresetDefaults.buttonDefaultFontSize,
-      touchPadding: PresetDefaults.defaultTouchPadding * 1.2,
-      padding: PresetDefaults.defaultPadding * 1.2,
-      fontColor: PresetDefaults.buttonDefaultFontColor,
+      // fontColor: PresetDefaults.buttonDefaultFontColor,
       pressDelay: PresetDefaults.defaultPressDelayAphasia,
       showFeedback: !PresetDefaults.defaultMultiModalFeedback,
       enableHaptic: !PresetDefaults.defaultMultiModalFeedback,
-      color: defaultAphasiaColor,
+      // color: defaultAphasiaColor,
+    ),
+
+    "Big Button": ComponentPreset(
+      // fontColor: PresetDefaults.buttonDefaultFontColor,
+      pressDelay: PresetDefaults.defaultPressDelayAphasia,
+      showFeedback: !PresetDefaults.defaultMultiModalFeedback,
+      enableHaptic: !PresetDefaults.defaultMultiModalFeedback,
+      // color: defaultAphasiaColor,
+    ),
+
+    "Text Button": ComponentPreset(
+      // fontColor: PresetDefaults.textButtonDefaultFontColor,
+      pressDelay: PresetDefaults.defaultPressDelayAphasia,
+      showFeedback: !PresetDefaults.defaultMultiModalFeedback,
+      enableHaptic: !PresetDefaults.defaultMultiModalFeedback,
     ),
 
     "Icon Button": ComponentPreset(
       pressDelay: PresetDefaults.defaultPressDelayAphasia,
       enableHaptic: !PresetDefaults.defaultMultiModalFeedback,
       showFeedback: !PresetDefaults.defaultMultiModalFeedback,
-      padding: PresetDefaults.defaultPadding * 1.2,
-      touchPadding: PresetDefaults.defaultTouchPadding * 1.2,
-      width: PresetDefaults.iconButtonDefaultWidth * 1.2,
-      height: PresetDefaults.iconButtonDefaultHeight * 1.2,
-      iconSize: PresetDefaults.iconButtonDefaultIconSize * 1.2,
-      borderRadius: PresetDefaults.defaultBorderRadius,
       iconColor: PresetDefaults.buttonDefaultFontColor,
-      color: defaultAphasiaColor,
+      // color: defaultAphasiaColor,
     ),
 
     "Linear Progress": ComponentPreset(
-      width: PresetDefaults.linearProgressDefaultWidth * 1.2,
-      height: PresetDefaults.linearProgressDefaultHeight * 1.2,
-      borderRadius: PresetDefaults.defaultBorderRadius,
       color: PresetDefaults.linearProgressDefaultColor,
       showLabel: PresetDefaults.linearProgressDefaultShowLabel,
       isAnimated: PresetDefaults.linearProgressDefaultIsAnimated,
       animationDuration: PresetDefaults.defaultAnimationDuration,
       borderColor: PresetDefaults.linearProgressDefaultBorderColor,
-      valueColor: defaultAphasiaColor,
-      labelColor: defaultAphasiaColor,
+      // valueColor: defaultAphasiaColor,
+      // labelColor: defaultAphasiaColor,
     ),
 
     "Alert Dialog": ComponentPreset(
       enableHaptic: !PresetDefaults.defaultMultiModalFeedback,
       showFeedback: !PresetDefaults.defaultMultiModalFeedback,
-      confirmBorderRadius: PresetDefaults.defaultBorderRadius,
-      cancelBorderRadius: PresetDefaults.defaultBorderRadius,
-      borderRadius: PresetDefaults.defaultBorderRadius,
-      padding: PresetDefaults.defaultPadding * 1.2,
-      confirmWidth: PresetDefaults.alertDialogButtonWidth * 1.2,
-      confirmHeight: PresetDefaults.alertDialogButtonHeight * 1.2,
-      cancelWidth: PresetDefaults.alertDialogButtonWidth * 1.2,
-      cancelHeight: PresetDefaults.alertDialogButtonHeight * 1.2,
-      width: PresetDefaults.alertDialogWidth * 1.2,
       backgroundColor: PresetDefaults.alertDialogBackgroundColor,
       titleColor: PresetDefaults.alertDialogTitleColor,
       contentColor: PresetDefaults.alertDialogContentColor,
@@ -77,8 +76,6 @@ void applyAphasia(UserComponentProvider p) {
       enableHaptic: !PresetDefaults.defaultMultiModalFeedback,
       showFeedback: !PresetDefaults.defaultMultiModalFeedback,
       showIcon: !PresetDefaults.defaultMultiModalFeedback,
-      height: PresetDefaults.tabBarDefaultHeight * 1.2,
-      padding: PresetDefaults.tabBarDefaultPadding * 1.2,
     ),
 
     "Bottom Bar": ComponentPreset(
@@ -88,9 +85,6 @@ void applyAphasia(UserComponentProvider p) {
       showFeedback: !PresetDefaults.defaultMultiModalFeedback,
       animationDuration: PresetDefaults.defaultAnimationDuration,
       backgroundColor: PresetDefaults.bottomBarBackgroundColor,
-      itemPaddingHorizontal: PresetDefaults.bottomBarDefaultItemPaddingHorizontal * 1.2,
-      itemPaddingVertical: PresetDefaults.bottomBarDefaultItemPaddingVertical * 1.2,
-      margin: PresetDefaults.bottomBarDefaultMargin * 1.2,
       selectedColorOpacity: PresetDefaults.bottomBarDefaultSelectedColorOpacity,
     ),
 
@@ -98,31 +92,21 @@ void applyAphasia(UserComponentProvider p) {
       pressDelay: PresetDefaults.defaultPressDelayAphasia,
       enableHaptic: !PresetDefaults.defaultMultiModalFeedback,
       showFeedback: !PresetDefaults.defaultMultiModalFeedback,
-      touchPadding: PresetDefaults.defaultTouchPadding * 1.2,
-      padding: PresetDefaults.defaultPadding * 1.2,
-      scale: PresetDefaults.checkboxDefaultScale,
-      color: defaultAphasiaColor,
+      // color: defaultAphasiaColor,
     ),
 
     "Radio": ComponentPreset(
       pressDelay: PresetDefaults.defaultPressDelayAphasia,
       enableHaptic: !PresetDefaults.defaultMultiModalFeedback,
       showFeedback: !PresetDefaults.defaultMultiModalFeedback,
-      touchPadding: PresetDefaults.defaultTouchPadding * 1.2,
-      padding: PresetDefaults.defaultPadding * 1.2,
-      color: defaultAphasiaColor,
-      size: PresetDefaults.radioDefaultSize,
+      // color: defaultAphasiaColor,
     ),
 
     "Slider": ComponentPreset(
       pressDelay: PresetDefaults.defaultPressDelayAphasia,
       enableHaptic: !PresetDefaults.defaultMultiModalFeedback,
       showFeedback: !PresetDefaults.defaultMultiModalFeedback,
-      padding: PresetDefaults.defaultPadding * 1.2,
-      touchPadding: PresetDefaults.defaultTouchPadding * 1.2,
-      height: PresetDefaults.textfieldDefaultHeight * 1.2,
-      width: PresetDefaults.textfieldDefaultWidth * 1.2,
-      activeColor: defaultAphasiaColor,
+      // activeColor: defaultAphasiaColor,
       inactiveColor: PresetDefaults.defaultInactiveColor,
     ),
 
@@ -130,32 +114,21 @@ void applyAphasia(UserComponentProvider p) {
       pressDelay: PresetDefaults.defaultPressDelayAphasia,
       enableHaptic: !PresetDefaults.defaultMultiModalFeedback,
       showFeedback: !PresetDefaults.defaultMultiModalFeedback,
-      touchPadding: PresetDefaults.defaultTouchPadding * 1.2,
-      color: defaultAphasiaColor,
-      height: PresetDefaults.textfieldDefaultHeight * 1.2,
-      width: PresetDefaults.textfieldDefaultWidth * 1.2,
+      // color: defaultAphasiaColor,
     ),
 
     "TextField": ComponentPreset(
       pressDelay: PresetDefaults.defaultPressDelayAphasia,
       enableHaptic: !PresetDefaults.defaultMultiModalFeedback,
       showFeedback: !PresetDefaults.defaultMultiModalFeedback,
-      touchPadding: PresetDefaults.defaultTouchPadding * 1.2,
-      padding: PresetDefaults.defaultPadding * 1.2,
-      color: defaultAphasiaColor,
-      height: PresetDefaults.textfieldDefaultHeight * 1.2,
-      width: PresetDefaults.textfieldDefaultWidth * 1.2,
+      // color: defaultAphasiaColor,
     ),
 
     "Dropdown": ComponentPreset(
       pressDelay: PresetDefaults.defaultPressDelayAphasia,
       enableHaptic: !PresetDefaults.defaultMultiModalFeedback,
       showFeedback: !PresetDefaults.defaultMultiModalFeedback,
-      touchPadding: PresetDefaults.defaultTouchPadding * 1.2,
-      padding: PresetDefaults.defaultPadding * 1.2,
-      height: PresetDefaults.dropdownDefaultHeight * 1.2,
-      width: PresetDefaults.dropdownDefaultWidth * 1.2,
-      color: defaultAphasiaColor,
+      // color: defaultAphasiaColor,
       listColor: PresetDefaults.buttonDefaultFontColor,
     ),
 
@@ -163,13 +136,8 @@ void applyAphasia(UserComponentProvider p) {
       pressDelay: PresetDefaults.defaultPressDelayAphasia,
       enableHaptic: !PresetDefaults.defaultMultiModalFeedback,
       showFeedback: !PresetDefaults.defaultMultiModalFeedback,
-      touchPadding: PresetDefaults.defaultTouchPadding * 1.2,
-      padding: PresetDefaults.defaultPadding * 1.2,
-      height: PresetDefaults.timePickerDefaultHeight * 1.2,
-      width: PresetDefaults.timePickerDefaultWidth * 1.2,
-      fontSize: PresetDefaults.timePickerDefaultFontSize * 1.2,
       color: PresetDefaults.buttonDefaultFontColor,
-      fontColor: defaultAphasiaColor,
+      // fontColor: defaultAphasiaColor,
     ),
   });
 }

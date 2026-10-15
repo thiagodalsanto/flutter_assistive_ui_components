@@ -25,6 +25,7 @@ class FloatingAssistiveButton extends StatefulWidget {
   final double size;
   final Color color;
   final Widget child;
+  final GlobalKey<NavigatorState>? navigatorKey;
 
   const FloatingAssistiveButton({
     super.key,
@@ -33,6 +34,7 @@ class FloatingAssistiveButton extends StatefulWidget {
     required this.initialPosition,
     this.size = 72,
     this.color = Colors.blue,
+    this.navigatorKey,
   });
 
   @override
@@ -41,6 +43,7 @@ class FloatingAssistiveButton extends StatefulWidget {
 
 class _FloatingAssistiveButtonState extends State<FloatingAssistiveButton> {
   late Offset position;
+  bool _isPresetSheetOpen = false;
 
   @override
   void initState() {
@@ -48,20 +51,29 @@ class _FloatingAssistiveButtonState extends State<FloatingAssistiveButton> {
     position = widget.initialPosition;
   }
 
-  void _openComponentSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      isDismissible: true,
-      enableDrag: true,
-      backgroundColor: Colors.transparent,
-      builder: (_) => const AccessibilityPresetSheet(),
-    );
+  Future<void> _openComponentSheet(BuildContext context) async {
+    if (_isPresetSheetOpen) return;
+
+    final navigatorContext = widget.navigatorKey?.currentContext ?? context;
+    setState(() => _isPresetSheetOpen = true);
+
+    try {
+      await showModalBottomSheet<void>(
+        context: navigatorContext,
+        isScrollControlled: true,
+        isDismissible: true,
+        enableDrag: true,
+        backgroundColor: Colors.transparent,
+        builder: (_) => const AccessibilityPresetSheet(),
+      );
+    } finally {
+      if (mounted) setState(() => _isPresetSheetOpen = false);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!widget.enabled) return const SizedBox.shrink();
+    if (!widget.enabled || _isPresetSheetOpen) return const SizedBox.shrink();
 
     return Positioned(
       left: position.dx,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_assistive_ui_components/src/internal/assistive_text_pt.dart';
 
 Widget section(String title, List<Widget> children) {
   return Container(
@@ -12,7 +13,7 @@ Widget section(String title, List<Widget> children) {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+        Text(assistiveConfigLabelPt(title), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
         const SizedBox(height: 14),
         ...children,
       ],

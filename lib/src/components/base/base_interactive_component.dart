@@ -33,7 +33,7 @@ abstract class BaseInteractiveComponent extends StatefulWidget {
     this.enableHaptic = false,
     this.hapticDuration = const Duration(milliseconds: 30),
     this.showFeedback = false,
-    this.feedbackText = 'Action performed',
+    this.feedbackText = 'Ação realizada',
     super.key,
   });
 }

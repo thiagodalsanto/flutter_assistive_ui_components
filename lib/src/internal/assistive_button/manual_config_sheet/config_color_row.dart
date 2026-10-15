@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:flutter_assistive_ui_components/src/internal/assistive_text_pt.dart';
 
 Widget colorRow({
   required String label,
@@ -14,7 +15,7 @@ Widget colorRow({
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(fontSize: 16)),
+        Text(assistiveConfigLabelPt(label), style: const TextStyle(fontSize: 16)),
         const SizedBox(height: 8),
 
         InkWell(
@@ -27,19 +28,22 @@ Widget colorRow({
               builder: (_) {
                 return AlertDialog(
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                  title: const Text("Pick Color"),
+                  title: const Text("Selecionar cor"),
                   content: SingleChildScrollView(
                     child: ColorPicker(pickerColor: value, onColorChanged: (c) => temp = c),
                   ),
                   actions: [
-                    TextButton(onPressed: () => Navigator.pop(context), child: const Text("Cancel")),
+                    TextButton(onPressed: () => Navigator.pop(context), child: const Text("Cancelar")),
                     ElevatedButton(
-                      style: ElevatedButton.styleFrom(backgroundColor: accent),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: accent,
+                        foregroundColor: Colors.white,
+                      ),
                       onPressed: () {
                         Navigator.pop(context);
                         onChanged(temp);
                       },
-                      child: const Text("Apply"),
+                      child: const Text("Aplicar"),
                     ),
                   ],
                 );

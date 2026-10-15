@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_assistive_ui_components/src/helpers/preset_size_multiplier.dart';
 import 'package:flutter_assistive_ui_components/src/providers/providers.dart';
 
 /// =======================================================
@@ -51,8 +52,8 @@ class _AssistiveUIProgressIndicatorState extends State<AssistiveUIProgressIndica
   Widget build(BuildContext context) {
     final provider = context.watch<UserComponentProvider>();
 
-    final height = provider.getConfig<double>("${prefix}_height") ?? widget.height;
-    final width = provider.getConfig<double>("${prefix}_width") ?? widget.width;
+    final height = getScaledPresetConfig(provider, prefix, 'height', widget.height);
+    final width = getScaledPresetConfig(provider, prefix, 'width', widget.width);
     final borderRadius = provider.getConfig<double>("${prefix}_borderRadius") ?? widget.borderRadius;
     final color = provider.getConfig<Color>("${prefix}_color") ?? widget.color;
     final valueColor = provider.getConfig<Color>("${prefix}_valueColor") ?? widget.valueColor;

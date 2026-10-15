@@ -17,6 +17,16 @@ class PresetDefaults {
   static const buttonDefaultFontSize = 20.0;
   static const buttonDefaultFontColor = Colors.white;
 
+  static const textButtonDefaultWidth = 200.0;
+  static const textButtonDefaultHeight = 56.0;
+  static const textButtonDefaultFontSize = 16.0;
+  static const textButtonDefaultFontColor = Colors.black;
+
+  static const bigButtonDefaultWidth = double.infinity;
+  static const bigButtonDefaultHeight = 80.0;
+  static const bigButtonDefaultFontSize = 24.0;
+  static const bigButtonDefaultFontColor = Colors.white;
+
   static const iconButtonDefaultWidth = 48.0;
   static const iconButtonDefaultHeight = 48.0;
   static const iconButtonDefaultIconSize = 28.0;

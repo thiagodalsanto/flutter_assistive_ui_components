@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_assistive_ui_components/src/components/base/interactive_state_mixin.dart';
+import 'package:flutter_assistive_ui_components/src/helpers/preset_size_multiplier.dart';
 import 'package:flutter_assistive_ui_components/src/providers/providers.dart';
 
 /// =======================================================
@@ -71,7 +72,7 @@ class _AssistiveUIRadioState<T> extends State<AssistiveUIRadio<T>>
       showFeedback: showFeedback,
       pressDelay: pressDelay,
       hapticDuration: hapticDuration,
-      feedbackText: "Selected: ${widget.value}",
+      feedbackText: "Selecionado: ${widget.value}",
     );
   }
 
@@ -80,8 +81,8 @@ class _AssistiveUIRadioState<T> extends State<AssistiveUIRadio<T>>
     final provider = context.watch<UserComponentProvider>();
 
     final size = provider.getConfig<double>("${prefix}_size") ?? widget.size;
-    final touchPadding = provider.getConfig<double>("${prefix}_touchPadding") ?? widget.touchPadding;
-    final padding = provider.getConfig<double>("${prefix}_padding") ?? widget.padding;
+    final touchPadding = getScaledPresetConfig(provider, prefix, 'touchPadding', widget.touchPadding);
+    final padding = getScaledPresetConfig(provider, prefix, 'padding', widget.padding);
     final color = provider.getConfig<Color>("${prefix}_color") ?? widget.color;
     final enableHaptic = provider.getConfig<bool>("${prefix}_enableHaptic") ?? widget.enableHaptic;
     final showFeedback = provider.getConfig<bool>("${prefix}_showFeedback") ?? widget.showFeedback;

@@ -4,6 +4,10 @@ IconData getIcon(String component) {
   switch (component) {
     case "Button":
       return Icons.smart_button;
+    case "Big Button":
+      return Icons.smart_button;
+    case "Text Button":
+      return Icons.smart_button;
     case "Icon Button":
       return Icons.radio_button_checked;
     case "Checkbox":
@@ -26,6 +30,12 @@ IconData getIcon(String component) {
       return Icons.access_time;
     case "Tab Bar":
       return Icons.tab;
+    case "Overview Card":
+      return Icons.view_day;
+    case "Task Card":
+      return Icons.task_alt;
+    case "Side Menu":
+      return Icons.menu;
     case "Alert Dialog":
       return Icons.warning_amber_outlined;
     case "Bottom Bar":

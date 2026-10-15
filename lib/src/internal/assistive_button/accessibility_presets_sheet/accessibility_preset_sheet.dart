@@ -9,6 +9,9 @@ class AccessibilityPresetSheet extends StatelessWidget {
 
   static const List<String> components = [
     "Button",
+    "Action Menu",
+    "Big Button",
+    "Text Button",
     "Icon Button",
     "Checkbox",
     "Dropdown",
@@ -20,6 +23,9 @@ class AccessibilityPresetSheet extends StatelessWidget {
     "Linear Progress",
     "Time Picker",
     "Tab Bar",
+    "Overview Card",
+    "Task Card",
+    "Side Menu",
     "Alert Dialog",
     "Bottom Bar",
   ];
@@ -89,12 +95,20 @@ class AccessibilityPresetSheet extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Accessibility Presets",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
-                ),
+              Row(
+                children: [
+                  const Expanded(
+                    child: Text(
+                      "Predefinições de acessibilidade",
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                  IconButton(
+                    tooltip: "Fechar",
+                    onPressed: () => Navigator.of(context).maybePop(),
+                    icon: const Icon(Icons.close),
+                  ),
+                ],
               ),
               const SizedBox(height: 20),
 
@@ -123,8 +137,9 @@ class AccessibilityPresetSheet extends StatelessWidget {
                     _modernButton(
                       context,
                       icon: Icons.settings,
-                      label: "Manual Configuration",
+                      label: "Personalizado",
                       onTap: () {
+                        applyCustomPreset(context);
                         Navigator.pop(context);
                         showModalBottomSheet(
                           context: context,

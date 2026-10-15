@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_assistive_ui_components/src/helpers/preset_size_multiplier.dart';
 import 'package:flutter_assistive_ui_components/src/internal/floating_feedback.dart';
 import 'package:flutter_assistive_ui_components/src/providers/providers.dart';
 
@@ -54,7 +55,7 @@ class AssistiveUIDropdown<T> extends StatefulWidget {
     this.showFeedback = false,
     this.color = Colors.blue,
     this.listColor = Colors.white,
-    this.feedbackText = "Dropdown Selected",
+    this.feedbackText = "Opção selecionada",
     this.icon = const Icon(Icons.arrow_drop_down),
   });
 
@@ -103,10 +104,10 @@ class _AssistiveUIDropdownState<T> extends State<AssistiveUIDropdown<T>> {
     final provider = context.watch<UserComponentProvider>();
     final GlobalKey dropdownKey = GlobalKey();
 
-    final width = provider.getConfig<double>("${prefix}_width") ?? widget.width;
-    final height = provider.getConfig<double>("${prefix}_height") ?? widget.height;
-    final touchPadding = provider.getConfig<double>("${prefix}_touchPadding") ?? widget.touchPadding;
-    final padding = provider.getConfig<double>("${prefix}_padding") ?? widget.padding;
+    final width = getScaledPresetConfig(provider, prefix, 'width', widget.width);
+    final height = getScaledPresetConfig(provider, prefix, 'height', widget.height);
+    final touchPadding = getScaledPresetConfig(provider, prefix, 'touchPadding', widget.touchPadding);
+    final padding = getScaledPresetConfig(provider, prefix, 'padding', widget.padding);
     final color = provider.getConfig<Color>("${prefix}_color") ?? widget.color;
     final listColor = provider.getConfig<Color>("${prefix}_listColor") ?? widget.listColor;
     final enableHaptic = provider.getConfig<bool>("${prefix}_enableHaptic") ?? widget.enableHaptic;

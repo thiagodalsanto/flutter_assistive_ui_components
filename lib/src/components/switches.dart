@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_assistive_ui_components/src/components/base/interactive_state_mixin.dart';
+import 'package:flutter_assistive_ui_components/src/helpers/preset_size_multiplier.dart';
 import 'package:flutter_assistive_ui_components/src/providers/providers.dart';
 
 /// Custom Switch Component
@@ -81,7 +82,7 @@ class _AssistiveUISwitchState extends State<AssistiveUISwitch>
       showFeedback: showFeedback,
       pressDelay: pressDelay,
       hapticDuration: widget.hapticDuration,
-      feedbackText: newValue ? "Enabled" : "Disabled",
+      feedbackText: newValue ? "Ativado" : "Desativado",
     );
   }
 
@@ -89,9 +90,9 @@ class _AssistiveUISwitchState extends State<AssistiveUISwitch>
   Widget build(BuildContext context) {
     final provider = context.watch<UserComponentProvider>();
 
-    final width = provider.getConfig<double>("${prefix}_width") ?? widget.width;
-    final height = provider.getConfig<double>("${prefix}_height") ?? widget.height;
-    final touchPadding = provider.getConfig<double>("${prefix}_touchPadding") ?? widget.touchPadding;
+    final width = getScaledPresetConfig(provider, prefix, 'width', widget.width);
+    final height = getScaledPresetConfig(provider, prefix, 'height', widget.height);
+    final touchPadding = getScaledPresetConfig(provider, prefix, 'touchPadding', widget.touchPadding);
     final enableHaptic = provider.getConfig<bool>("${prefix}_enableHaptic") ?? widget.enableHaptic;
     final showFeedback = provider.getConfig<bool>("${prefix}_showFeedback") ?? widget.showFeedback;
     final pressDelayMs = provider.getConfig<double>("${prefix}_pressDelay") ?? 0;
