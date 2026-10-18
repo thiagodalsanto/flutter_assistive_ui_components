@@ -1,7 +1,10 @@
 import 'package:flutter_assistive_ui_components/src/models/models.dart';
 import 'package:flutter_assistive_ui_components/src/providers/providers.dart';
 
-void applyPresetMap(UserComponentProvider p, Map<String, ComponentPreset> presets) {
+void applyPresetMap(
+  UserComponentProvider p,
+  Map<String, ComponentPreset> presets,
+) {
   for (final entry in presets.entries) {
     final key = _normalize(entry.key);
     final preset = entry.value;
@@ -49,7 +52,12 @@ void applyPresetMap(UserComponentProvider p, Map<String, ComponentPreset> preset
     _applyProperty(p, key, 'cancelBg', preset.cancelBackgroundColor);
     _applyProperty(p, key, 'cancelTextColor', preset.cancelTextColor);
     _applyProperty(p, key, 'showIcon', preset.showIcon);
-    _applyProperty(p, key, 'itemPaddingHorizontal', preset.itemPaddingHorizontal);
+    _applyProperty(
+      p,
+      key,
+      'itemPaddingHorizontal',
+      preset.itemPaddingHorizontal,
+    );
     _applyProperty(p, key, 'itemPaddingVertical', preset.itemPaddingVertical);
     _applyProperty(p, key, 'margin', preset.margin);
     _applyProperty(p, key, 'selectedColorOpacity', preset.selectedColorOpacity);
@@ -58,12 +66,18 @@ void applyPresetMap(UserComponentProvider p, Map<String, ComponentPreset> preset
 
     // Propriedades opcionais
     if (preset.days != null) _applyProperty(p, key, 'days', preset.days);
-    if (preset.daySize != null) _applyProperty(p, key, 'daySize', preset.daySize);
+    if (preset.daySize != null)
+      _applyProperty(p, key, 'daySize', preset.daySize);
   }
 }
 
 /// Helper para aplicar propriedade apenas se não for null
-void _applyProperty(UserComponentProvider p, String componentKey, String propertyKey, dynamic value) {
+void _applyProperty(
+  UserComponentProvider p,
+  String componentKey,
+  String propertyKey,
+  dynamic value,
+) {
   if (value != null) {
     p.setConfig("${componentKey}_$propertyKey", value);
   }

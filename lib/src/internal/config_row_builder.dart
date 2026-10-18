@@ -35,7 +35,10 @@ class ConfigRowBuilder {
         children: [
           Text(
             assistiveConfigLabelPt(label),
-            style: const TextStyle(fontSize: _labelFontSize, fontWeight: FontWeight.w500),
+            style: const TextStyle(
+              fontSize: _labelFontSize,
+              fontWeight: FontWeight.w500,
+            ),
           ),
           const SizedBox(height: _spacingBetweenLabelAndWidget),
           ...children,
@@ -69,7 +72,10 @@ class ConfigRowBuilder {
                   ),
                 ),
                 actions: [
-                  TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar')),
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text('Cancelar'),
+                  ),
                   TextButton(
                     onPressed: () {
                       onChanged(tempColor);
@@ -105,13 +111,20 @@ class ConfigRowBuilder {
     int divisions = 10,
     String Function(double)? labelFormatter,
   }) {
-    final displayLabel = labelFormatter?.call(value) ?? value.toStringAsFixed(1);
+    final displayLabel =
+        labelFormatter?.call(value) ?? value.toStringAsFixed(1);
 
     return buildRow(label, [
       Row(
         children: [
           Expanded(
-            child: Slider(value: value, min: min, max: max, divisions: divisions, onChanged: onChanged),
+            child: Slider(
+              value: value,
+              min: min,
+              max: max,
+              divisions: divisions,
+              onChanged: onChanged,
+            ),
           ),
           SizedBox(
             width: 60,
@@ -156,7 +169,10 @@ class ConfigRowBuilder {
         isExpanded: true,
         items:
             options.map((String option) {
-              return DropdownMenuItem<String>(value: option, child: Text(assistiveConfigLabelPt(option)));
+              return DropdownMenuItem<String>(
+                value: option,
+                child: Text(assistiveConfigLabelPt(option)),
+              );
             }).toList(),
         onChanged: onChanged,
       ),
@@ -190,7 +206,11 @@ class ColorPicker extends StatefulWidget {
   final Color color;
   final ValueChanged<Color> onColorChanged;
 
-  const ColorPicker({required this.color, required this.onColorChanged, super.key});
+  const ColorPicker({
+    required this.color,
+    required this.onColorChanged,
+    super.key,
+  });
 
   @override
   State<ColorPicker> createState() => _ColorPickerState();

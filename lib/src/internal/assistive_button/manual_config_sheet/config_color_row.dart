@@ -15,7 +15,10 @@ Widget colorRow({
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(assistiveConfigLabelPt(label), style: const TextStyle(fontSize: 16)),
+        Text(
+          assistiveConfigLabelPt(label),
+          style: const TextStyle(fontSize: 16),
+        ),
         const SizedBox(height: 8),
 
         InkWell(
@@ -27,13 +30,21 @@ Widget colorRow({
               context: context,
               builder: (_) {
                 return AlertDialog(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
                   title: const Text("Selecionar cor"),
                   content: SingleChildScrollView(
-                    child: ColorPicker(pickerColor: value, onColorChanged: (c) => temp = c),
+                    child: ColorPicker(
+                      pickerColor: value,
+                      onColorChanged: (c) => temp = c,
+                    ),
                   ),
                   actions: [
-                    TextButton(onPressed: () => Navigator.pop(context), child: const Text("Cancelar")),
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text("Cancelar"),
+                    ),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: accent,

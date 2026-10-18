@@ -8,7 +8,11 @@ void applyPreset(BuildContext context, String preset) {
   final p = Provider.of<UserComponentProvider>(context, listen: false);
 
   if (!const {"aphasia", "severe_motor", "fine_motor"}.contains(preset)) {
-    throw ArgumentError.value(preset, 'preset', 'Preset de acessibilidade desconhecido');
+    throw ArgumentError.value(
+      preset,
+      'preset',
+      'Preset de acessibilidade desconhecido',
+    );
   }
 
   p.clearConfigs();

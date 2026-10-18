@@ -67,7 +67,6 @@ class _AssistiveUICheckboxState extends State<AssistiveUICheckbox>
     Duration pressDelay,
   ) async {
     if (isLocked) return;
-
     await handleInteraction(
       onAction: () {
         setState(() => _checked = !_checked);
@@ -77,7 +76,10 @@ class _AssistiveUICheckboxState extends State<AssistiveUICheckbox>
       showFeedback: showFeedback,
       pressDelay: pressDelay,
       hapticDuration: widget.hapticDuration,
-      feedbackText: _checked ? widget.feedbackTextOnCheck : widget.feedbackTextOnUncheck,
+      // O feedback descreve o estado APÓS o toggle, por isso é o inverso de _checked:
+      // _checked ainda tem o valor de antes do clique neste ponto.
+      feedbackText:
+          !_checked ? widget.feedbackTextOnCheck : widget.feedbackTextOnUncheck,
     );
   }
 
@@ -85,19 +87,43 @@ class _AssistiveUICheckboxState extends State<AssistiveUICheckbox>
   Widget build(BuildContext context) {
     final provider = context.watch<UserComponentProvider>();
 
-    final scale = provider.getConfig<double>("${prefix}_scale") ?? widget.scale;
-    final padding = getScaledPresetConfig(provider, prefix, 'padding', widget.padding);
-    final touchPadding = getScaledPresetConfig(provider, prefix, 'touchPadding', widget.touchPadding);
+    // O checkbox visual cresce pelo preset (Fine 1.0 / Intermediate 1.2 /
+    // Severe 1.4) e pelo crescimento por prop do modo Personalizado —
+    // o Fine (widget.scale) é a base.
+    final scale = getScaledPresetConfig(
+      provider,
+      prefix,
+      'scale',
+      widget.scale,
+    );
+    final padding = getScaledPresetConfig(
+      provider,
+      prefix,
+      'padding',
+      widget.padding,
+    );
+    final touchPadding = getScaledPresetConfig(
+      provider,
+      prefix,
+      'touchPadding',
+      widget.touchPadding,
+    );
     final color = provider.getConfig<Color>("${prefix}_color") ?? widget.color;
-    final enableHaptic = provider.getConfig<bool>("${prefix}_enableHaptic") ?? widget.enableHaptic;
-    final showFeedback = provider.getConfig<bool>("${prefix}_showFeedback") ?? widget.showFeedback;
+    final enableHaptic =
+        provider.getConfig<bool>("${prefix}_enableHaptic") ??
+        widget.enableHaptic;
+    final showFeedback =
+        provider.getConfig<bool>("${prefix}_showFeedback") ??
+        widget.showFeedback;
     final pressDelayMs =
-        provider.getConfig<num>("${prefix}_pressDelay")?.toInt() ?? widget.pressDelay.inMilliseconds;
+        provider.getConfig<num>("${prefix}_pressDelay")?.toInt() ??
+        widget.pressDelay.inMilliseconds;
     final pressDelay = Duration(milliseconds: pressDelayMs);
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onTap: () => _handleToggle(context, enableHaptic, showFeedback, pressDelay),
+      onTap:
+          () => _handleToggle(context, enableHaptic, showFeedback, pressDelay),
       child: Padding(
         padding: EdgeInsets.all(touchPadding),
         child: Container(
@@ -111,13 +137,21 @@ class _AssistiveUICheckboxState extends State<AssistiveUICheckbox>
                 onChanged:
                     isLocked
                         ? null
-                        : (_) => _handleToggle(context, enableHaptic, showFeedback, pressDelay),
+                        : (_) => _handleToggle(
+                          context,
+                          enableHaptic,
+                          showFeedback,
+                          pressDelay,
+                        ),
                 fillColor: WidgetStateProperty.resolveWith<Color>((states) {
                   if (states.contains(WidgetState.selected)) {
                     return color;
                   }
-                  return Colors.transparent;
+                  return Theme.of(context).colorScheme.surface;
                 }),
+                // Borda visível no estado não marcado, em tom apagado da cor;
+                // antes ficava invisível (fill transparente + borda padrão).
+                side: BorderSide(color: color.withValues(alpha: 0.5), width: 2),
               ),
             ),
           ),

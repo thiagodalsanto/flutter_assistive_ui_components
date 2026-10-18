@@ -17,7 +17,11 @@ Widget saveButton(VoidCallback onTap) {
           alignment: Alignment.center,
           child: const Text(
             "Salvar",
-            style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
       ),

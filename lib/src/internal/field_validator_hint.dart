@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
 class FieldValidatorHint extends StatelessWidget {
-  const FieldValidatorHint({required this.hintText, required this.isValid, super.key});
+  const FieldValidatorHint({
+    required this.hintText,
+    required this.isValid,
+    super.key,
+  });
 
   final String hintText;
   final bool isValid;
@@ -22,7 +26,9 @@ class FieldValidatorHint extends StatelessWidget {
                     : Border.all(color: Colors.grey.shade400),
             borderRadius: BorderRadius.circular(50),
           ),
-          child: const Center(child: Icon(Icons.check, color: Colors.white, size: 16)),
+          child: const Center(
+            child: Icon(Icons.check, color: Colors.white, size: 16),
+          ),
         ),
         const SizedBox(width: 8),
         Expanded(child: Text(hintText)),

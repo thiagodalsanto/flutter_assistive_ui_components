@@ -77,7 +77,10 @@ class ComponentSelectionSheet extends StatelessWidget {
                   const Expanded(
                     child: Text(
                       "Selecionar componente",
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
                   IconButton(

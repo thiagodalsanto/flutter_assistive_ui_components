@@ -8,12 +8,17 @@ Widget section(String title, List<Widget> children) {
     decoration: BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.circular(20),
-      boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 12, offset: Offset(0, 4))],
+      boxShadow: const [
+        BoxShadow(color: Colors.black12, blurRadius: 12, offset: Offset(0, 4)),
+      ],
     ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(assistiveConfigLabelPt(title), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+        Text(
+          assistiveConfigLabelPt(title),
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+        ),
         const SizedBox(height: 14),
         ...children,
       ],

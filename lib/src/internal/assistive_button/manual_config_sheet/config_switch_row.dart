@@ -14,13 +14,25 @@ Widget switchRow({
   return Container(
     margin: const EdgeInsets.only(bottom: 12),
     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-    decoration: BoxDecoration(color: Colors.grey.shade50, borderRadius: BorderRadius.circular(14)),
+    decoration: BoxDecoration(
+      color: Colors.grey.shade50,
+      borderRadius: BorderRadius.circular(14),
+    ),
     child: Row(
       children: [
-        Expanded(child: Text(assistiveConfigLabelPt(label), style: const TextStyle(fontSize: 16))),
+        Expanded(
+          child: Text(
+            assistiveConfigLabelPt(label),
+            style: const TextStyle(fontSize: 16),
+          ),
+        ),
         Transform.scale(
           scale: 1.2,
-          child: Switch(value: value, activeColor: accent, onChanged: onChanged),
+          child: Switch(
+            value: value,
+            activeColor: accent,
+            onChanged: onChanged,
+          ),
         ),
       ],
     ),

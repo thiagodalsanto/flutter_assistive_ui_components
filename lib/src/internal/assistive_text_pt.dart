@@ -111,7 +111,8 @@ String assistiveFeedbackPt(String message) {
   if (translated != null) return translated;
   if (message.startsWith('Tab: ')) return 'Aba: ${message.substring(5)}';
   if (message.startsWith('Value: ')) return 'Valor: ${message.substring(7)}';
-  if (message.startsWith('Selected: ')) return 'Selecionado: ${message.substring(10)}';
+  if (message.startsWith('Selected: '))
+    return 'Selecionado: ${message.substring(10)}';
   if (message.startsWith('Time selected: ')) {
     return 'Horário selecionado: ${message.substring(15)}';
   }

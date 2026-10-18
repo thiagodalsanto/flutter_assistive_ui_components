@@ -38,7 +38,8 @@ class FloatingAssistiveButton extends StatefulWidget {
   });
 
   @override
-  State<FloatingAssistiveButton> createState() => _FloatingAssistiveButtonState();
+  State<FloatingAssistiveButton> createState() =>
+      _FloatingAssistiveButtonState();
 }
 
 class _FloatingAssistiveButtonState extends State<FloatingAssistiveButton> {
@@ -97,7 +98,11 @@ class _FloatingAssistiveButtonState extends State<FloatingAssistiveButton> {
                 ),
                 borderRadius: BorderRadius.circular(22),
                 boxShadow: const [
-                  BoxShadow(color: Colors.black26, blurRadius: 12, offset: Offset(0, 6)),
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 12,
+                    offset: Offset(0, 6),
+                  ),
                 ],
               ),
               child: Stack(

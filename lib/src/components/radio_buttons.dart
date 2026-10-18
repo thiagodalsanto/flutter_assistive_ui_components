@@ -80,14 +80,32 @@ class _AssistiveUIRadioState<T> extends State<AssistiveUIRadio<T>>
   Widget build(BuildContext context) {
     final provider = context.watch<UserComponentProvider>();
 
-    final size = provider.getConfig<double>("${prefix}_size") ?? widget.size;
-    final touchPadding = getScaledPresetConfig(provider, prefix, 'touchPadding', widget.touchPadding);
-    final padding = getScaledPresetConfig(provider, prefix, 'padding', widget.padding);
+    // O radio visual cresce pelo preset (Fine 1.0 / Intermediate 1.2 /
+    // Severe 1.4) e pelo crescimento por prop do modo Personalizado —
+    // o Fine (widget.size) é a base.
+    final size = getScaledPresetConfig(provider, prefix, 'size', widget.size);
+    final touchPadding = getScaledPresetConfig(
+      provider,
+      prefix,
+      'touchPadding',
+      widget.touchPadding,
+    );
+    final padding = getScaledPresetConfig(
+      provider,
+      prefix,
+      'padding',
+      widget.padding,
+    );
     final color = provider.getConfig<Color>("${prefix}_color") ?? widget.color;
-    final enableHaptic = provider.getConfig<bool>("${prefix}_enableHaptic") ?? widget.enableHaptic;
-    final showFeedback = provider.getConfig<bool>("${prefix}_showFeedback") ?? widget.showFeedback;
+    final enableHaptic =
+        provider.getConfig<bool>("${prefix}_enableHaptic") ??
+        widget.enableHaptic;
+    final showFeedback =
+        provider.getConfig<bool>("${prefix}_showFeedback") ??
+        widget.showFeedback;
     final pressDelayMs =
-        provider.getConfig<double>("${prefix}_pressDelay") ?? widget.pressDelay.inMilliseconds;
+        provider.getConfig<double>("${prefix}_pressDelay") ??
+        widget.pressDelay.inMilliseconds;
     final pressDelay = Duration(milliseconds: pressDelayMs.toInt());
 
     return GestureDetector(
@@ -127,7 +145,10 @@ class _AssistiveUIRadioState<T> extends State<AssistiveUIRadio<T>>
                   if (states.contains(WidgetState.selected)) {
                     return color;
                   }
-                  return Colors.grey.withOpacity(0.6);
+                  // Tom suave do tema em vez de cinza puro duro.
+                  return Theme.of(
+                    context,
+                  ).colorScheme.outline.withValues(alpha: 0.5);
                 }),
               ),
             ),

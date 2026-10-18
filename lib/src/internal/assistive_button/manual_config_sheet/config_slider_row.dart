@@ -2,11 +2,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_assistive_ui_components/src/internal/assistive_text_pt.dart';
-import 'package:flutter_assistive_ui_components/src/providers/providers.dart';
-import 'package:provider/provider.dart';
 
+/// Crescimento máximo aceito no modo Personalizado.
 const _maximumCustomGrowthPercent = 40.0;
 
+/// Linha de slider do configurador manual.
+///
+/// Para props de tamanho, o slider mostra CRESCIMENTO em % sobre a
+/// [baseline] — o valor com que a sheet abriu (o Fine/base do widget, ou o
+/// estado efetivo já personalizado em uma edição anterior). Mover para 40%
+/// grava um valor igual a 1.4 × base (mesmo aspecto do Severe).
 Widget sliderRow({
   required String label,
   required double value,
@@ -15,25 +20,32 @@ Widget sliderRow({
   required ValueChanged<double> onChanged,
   required context,
   bool showInt = false,
+  double? baseline,
 }) {
   final Color accent = Colors.blue;
-  final component = Provider.of<UserComponentProvider>(context, listen: false).activeConfigComponent;
-  final usesPercentage = !_isNonSizeValue(label);
-  final baselineKey = '$component|$label|$min|$max';
-  final provider = Provider.of<UserComponentProvider>(context, listen: false);
-  final baseline = usesPercentage ? provider.getOrStoreFineMotorBaseline(baselineKey, value) : value;
-  final sliderValue = usesPercentage
-      ? (baseline == 0 ? 0.0 : ((value / baseline) - 1) * 100).clamp(0.0, _maximumCustomGrowthPercent)
-      : value.clamp(min, _isInteractionDelay(label) ? 2000.0 : max);
+
+  final usesPercentage =
+      !_isNonSizeValue(label) && baseline != null && baseline > 0;
+
+  final sliderValue =
+      usesPercentage
+          ? ((value / baseline) - 1) * 100
+          : value.clamp(min, _isInteractionDelay(label) ? 2000.0 : max);
+  final clampedSliderValue =
+      usesPercentage
+          ? sliderValue.clamp(0.0, _maximumCustomGrowthPercent)
+          : sliderValue;
   final sliderMin = usesPercentage ? 0.0 : min;
-  final sliderMax = usesPercentage
-      ? _maximumCustomGrowthPercent
-      : (_isInteractionDelay(label) ? 2000.0 : max);
-  final displayedValue = usesPercentage
-      ? '${sliderValue.round()}%'
-      : showInt || _isInteractionDelay(label)
-      ? sliderValue.toInt().toString()
-      : value.toStringAsFixed(1);
+  final sliderMax =
+      usesPercentage
+          ? _maximumCustomGrowthPercent
+          : (_isInteractionDelay(label) ? 2000.0 : max);
+  final displayedValue =
+      usesPercentage
+          ? '${clampedSliderValue.round()}%'
+          : showInt || _isInteractionDelay(label)
+          ? clampedSliderValue.toInt().toString()
+          : value.toStringAsFixed(1);
 
   return Padding(
     padding: const EdgeInsets.only(bottom: 14),
@@ -42,7 +54,12 @@ Widget sliderRow({
       children: [
         Row(
           children: [
-            Expanded(child: Text(assistiveConfigLabelPt(label), style: const TextStyle(fontSize: 16))),
+            Expanded(
+              child: Text(
+                assistiveConfigLabelPt(label),
+                style: const TextStyle(fontSize: 16),
+              ),
+            ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               decoration: BoxDecoration(
@@ -72,11 +89,14 @@ Widget sliderRow({
             child: Slider(
               min: sliderMin,
               max: sliderMax,
-              value: sliderValue,
+              value: clampedSliderValue,
               onChanged: (newValue) {
                 onChanged(
                   usesPercentage
-                      ? baseline * (1 + newValue.clamp(0.0, _maximumCustomGrowthPercent) / 100)
+                      ? baseline *
+                          (1 +
+                              newValue.clamp(0.0, _maximumCustomGrowthPercent) /
+                                  100)
                       : newValue,
                 );
               },
@@ -89,7 +109,8 @@ Widget sliderRow({
 }
 
 bool _isInteractionDelay(String label) =>
-    label.toLowerCase().contains('delay') || label.toLowerCase().endsWith('(ms)');
+    label.toLowerCase().contains('delay') ||
+    label.toLowerCase().endsWith('(ms)');
 
 bool _isNonSizeValue(String label) {
   final normalized = label.toLowerCase();

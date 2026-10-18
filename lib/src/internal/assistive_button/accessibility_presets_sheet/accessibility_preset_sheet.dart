@@ -60,7 +60,13 @@ class AccessibilityPresetSheet extends StatelessWidget {
                 ),
                 const SizedBox(width: 16),
                 Expanded(
-                  child: Text(label, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+                  child: Text(
+                    label,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
                 const Icon(Icons.arrow_forward_ios, size: 18),
               ],
@@ -100,7 +106,10 @@ class AccessibilityPresetSheet extends StatelessWidget {
                   const Expanded(
                     child: Text(
                       "Predefinições de acessibilidade",
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
                   IconButton(
@@ -119,13 +128,13 @@ class AccessibilityPresetSheet extends StatelessWidget {
                     _modernButton(
                       context,
                       icon: Icons.pan_tool_alt,
-                      label: "Fine Motor Mode",
+                      label: "Fine Motor Impairment",
                       onTap: () => applyPreset(context, "fine_motor"),
                     ),
                     _modernButton(
                       context,
                       icon: Icons.record_voice_over,
-                      label: "Aphasia Mode",
+                      label: "Intermediate Motor Impairment",
                       onTap: () => applyPreset(context, "aphasia"),
                     ),
                     _modernButton(

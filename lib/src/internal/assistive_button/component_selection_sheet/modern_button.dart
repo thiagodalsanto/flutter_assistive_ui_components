@@ -32,7 +32,13 @@ Widget modernButton(
               ),
               const SizedBox(width: 16),
               Expanded(
-                child: Text(label, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+                child: Text(
+                  label,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
               const Icon(Icons.arrow_forward_ios, size: 18),
             ],

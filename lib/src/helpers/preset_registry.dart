@@ -98,5 +98,6 @@ class PresetNotFoundException implements Exception {
   PresetNotFoundException(this.presetName);
 
   @override
-  String toString() => 'PresetNotFoundException: Preset "$presetName" não encontrado no registry';
+  String toString() =>
+      'PresetNotFoundException: Preset "$presetName" não encontrado no registry';
 }

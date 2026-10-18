@@ -131,7 +131,9 @@ class _AssistiveUITextFieldState extends State<AssistiveUITextField> {
       _hasOneLowercase = value.contains(RegExp('[a-z]'));
       _hasOneUppercase = value.contains(RegExp('[A-Z]'));
       _hasOneNumber = value.contains(RegExp('[0-9]'));
-      _hasOneSymbol = value.contains(RegExp(r'''[-#!\$@£%\^&\*\(\)_\+\|~=`\{\}\[\]:";'<>\?,\.\/ ]'''));
+      _hasOneSymbol = value.contains(
+        RegExp(r'''[-#!\$@£%\^&\*\(\)_\+\|~=`\{\}\[\]:";'<>\?,\.\/ ]'''),
+      );
     });
   }
 
@@ -165,27 +167,57 @@ class _AssistiveUITextFieldState extends State<AssistiveUITextField> {
   Widget build(BuildContext context) {
     final provider = context.watch<UserComponentProvider>();
     final FocusNode effectiveFocusNode = widget.focusNode ?? _focusNode;
-
-    final height = getScaledPresetConfig(provider, prefix, 'height', widget.height);
-    final validationHeight = widget.validator != null && widget.isPassword != true ? 48.0 : 0.0;
-    final width = getScaledPresetConfig(provider, prefix, 'width', widget.width);
-    final touchPadding = getScaledPresetConfig(provider, prefix, 'touchPadding', widget.touchPadding);
-    final padding = getScaledPresetConfig(provider, prefix, 'padding', widget.padding);
+    final height = getScaledPresetConfig(
+      provider,
+      prefix,
+      'height',
+      widget.height,
+    );
+    // A altura do campo de palavra-passe (300) também escalam com o
+    // multiplicador do preset, senão o box fica
+    // pequeno demais quando o texto cresce.
+    // Nos campos normais o box cresce pela altura intrínseca (não-dense),
+    // evitando overflow/overlap do label flutuante.
+    final presetMultiplier = getPresetSizeMultiplier(provider, prefix);
+    final width = getScaledPresetConfig(
+      provider,
+      prefix,
+      'width',
+      widget.width,
+    );
+    final touchPadding = getScaledPresetConfig(
+      provider,
+      prefix,
+      'touchPadding',
+      widget.touchPadding,
+    );
+    final padding = getScaledPresetConfig(
+      provider,
+      prefix,
+      'padding',
+      widget.padding,
+    );
     final pressDelayMs =
-        provider.getConfig<double>("${prefix}_pressDelay") ?? widget.pressDelay.inMilliseconds;
-    final enableHaptic = provider.getConfig<bool>("${prefix}_enableHaptic") ?? widget.enableHaptic;
-    final showFeedback = provider.getConfig<bool>("${prefix}_showFeedback") ?? widget.showFeedback;
+        provider.getConfig<double>("${prefix}_pressDelay") ??
+        widget.pressDelay.inMilliseconds;
+    final enableHaptic =
+        provider.getConfig<bool>("${prefix}_enableHaptic") ??
+        widget.enableHaptic;
+    final showFeedback =
+        provider.getConfig<bool>("${prefix}_showFeedback") ??
+        widget.showFeedback;
     final color = provider.getConfig<Color>("${prefix}_color") ?? widget.color;
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: () => _handleTap(
-        context,
-        pressDelay: Duration(milliseconds: pressDelayMs.toInt()),
-        enableHaptic: enableHaptic,
-        hapticDuration: widget.hapticDuration,
-        showFeedback: showFeedback,
-      ),
+      onTap:
+          () => _handleTap(
+            context,
+            pressDelay: Duration(milliseconds: pressDelayMs.toInt()),
+            enableHaptic: enableHaptic,
+            hapticDuration: widget.hapticDuration,
+            showFeedback: showFeedback,
+          ),
       child: Padding(
         padding: EdgeInsets.all(touchPadding),
         child: AnimatedContainer(
@@ -193,70 +225,101 @@ class _AssistiveUITextFieldState extends State<AssistiveUITextField> {
           padding: EdgeInsets.all(padding),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0 + padding),
-            boxShadow: _pressed
-                ? [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.15),
-                      blurRadius: 8,
-                      offset: const Offset(0, 4),
-                    ),
-                  ]
-                : [],
+            boxShadow:
+                _pressed
+                    ? [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.15),
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
+                      ),
+                    ]
+                    : [],
           ),
           child: SizedBox(
             width: width,
-            height: widget.isPassword! ? 300 : height + validationHeight,
+            // Campo normal: altura intrínseca (o InputDecoration não-dense
+            // reserva espaço para o label flutuante, que cresce com o textScaler).
+            // Forçar uma altura fixa menor que a intrínseca fazia o label
+            // transbordar e sobrepor o widget acima quando o preset escala.
+            height: widget.isPassword! ? 300 * presetMultiplier : null,
             child: SingleChildScrollView(
               child: Column(
                 children: [
                   ConstrainedBox(
-                    constraints: BoxConstraints(minHeight: widget.isPassword == true ? 0 : height),
+                    constraints: BoxConstraints(
+                      minHeight: widget.isPassword == true ? 0 : height,
+                    ),
                     child: FormBuilderTextField(
                       autofocus: widget.autofocus!,
                       initialValue: widget.initialValue,
                       focusNode: effectiveFocusNode,
                       onChanged: _onChanged,
                       keyboardType: widget.keyboardType,
-                      obscureText: (widget.showObscure == true) ? !_isVisible : false,
-                      validator: widget.isPassword!
-                          ? FormBuilderValidators.compose([
-                              FormBuilderValidators.required(),
+                      obscureText:
+                          (widget.showObscure == true) ? !_isVisible : false,
+                      validator:
+                          widget.isPassword!
+                              ? FormBuilderValidators.compose([
+                                FormBuilderValidators.required(),
 
-                              (val) {
-                                if (_hasMinLengthEight == false ||
-                                    _hasOneLowercase == false ||
-                                    _hasOneUppercase == false ||
-                                    _hasOneNumber == false ||
-                                    _hasOneSymbol == false) {
-                                  return widget.hintString.errorPasswordRequirementsNotMeet;
-                                }
-                                return null;
-                              },
-                            ])
-                          : widget.validator,
+                                (val) {
+                                  if (_hasMinLengthEight == false ||
+                                      _hasOneLowercase == false ||
+                                      _hasOneUppercase == false ||
+                                      _hasOneNumber == false ||
+                                      _hasOneSymbol == false) {
+                                    return widget
+                                        .hintString
+                                        .errorPasswordRequirementsNotMeet;
+                                  }
+                                  return null;
+                                },
+                              ])
+                              : widget.validator,
                       decoration: InputDecoration(
                         prefixIcon: Icon(widget.prefixIconData),
                         labelText: widget.label,
                         suffixIcon: Visibility(
                           visible: widget.showObscure == true,
                           child: IconButton(
-                            onPressed: () => setState(() {
-                              _isVisible = !_isVisible;
-                            }),
-                            icon: _isVisible
-                                ? const Icon(Icons.visibility)
-                                : const Icon(Icons.visibility_off, color: Colors.grey),
+                            onPressed:
+                                () => setState(() {
+                                  _isVisible = !_isVisible;
+                                }),
+                            icon:
+                                _isVisible
+                                    ? const Icon(Icons.visibility)
+                                    : const Icon(
+                                      Icons.visibility_off,
+                                      color: Colors.grey,
+                                    ),
                           ),
                         ),
-                        isDense: widget.isPassword == true,
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                        // Sem isDense: reserva espaco para o label flutuante e evita
+                        // overflow quando o texto escala com o preset.
+                        isDense: false,
+                        // Visual: fundo suave e bordas em tom apagado da cor do
+                        // componente; a cor do preset (config) continua mandando no foco.
+                        filled: true,
+                        fillColor: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withValues(alpha: 0.04),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(14),
+                          borderSide: BorderSide(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.outline.withValues(alpha: 0.4),
+                          ),
+                        ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: color, width: 2),
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(14),
                         ),
                         contentPadding: EdgeInsets.symmetric(
-                          horizontal: padding,
-                          vertical: widget.isPassword == true ? padding : (height / 2) - 12,
+                          horizontal: padding + 8,
+                          vertical: (height / 2) - 12,
                         ),
                       ),
                       textInputAction: widget.textInputAction,
@@ -282,9 +345,15 @@ class _AssistiveUITextFieldState extends State<AssistiveUITextField> {
                       isValid: _hasOneUppercase,
                     ),
                     const SizedBox(height: 16),
-                    FieldValidatorHint(hintText: widget.hintString.hasOneNumber, isValid: _hasOneNumber),
+                    FieldValidatorHint(
+                      hintText: widget.hintString.hasOneNumber,
+                      isValid: _hasOneNumber,
+                    ),
                     const SizedBox(height: 16),
-                    FieldValidatorHint(hintText: widget.hintString.hasOneSymbol, isValid: _hasOneSymbol),
+                    FieldValidatorHint(
+                      hintText: widget.hintString.hasOneSymbol,
+                      isValid: _hasOneSymbol,
+                    ),
                   ],
                 ],
               ),

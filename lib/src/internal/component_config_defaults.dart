@@ -180,7 +180,11 @@ class ComponentConfigDefaults {
       'enableHaptic': true,
       'showFeedback': true,
     },
-    'overviewcard': {'height': 100.0, 'touchPadding': 4.0, 'color': 'Colors.white'},
+    'overviewcard': {
+      'height': 100.0,
+      'touchPadding': 4.0,
+      'color': 'Colors.white',
+    },
     'taskcard': {
       'padding': 16.0,
       'actionBarHeight': 48.0,

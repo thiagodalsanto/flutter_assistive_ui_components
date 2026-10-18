@@ -83,14 +83,20 @@ class _AssistiveUITimePickerState extends State<AssistiveUITimePicker> {
       await Future.delayed(widget.hapticDuration);
     }
 
-    final picked = await showTimePicker(context: context, initialTime: _currentValue ?? TimeOfDay.now());
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: _currentValue ?? TimeOfDay.now(),
+    );
 
     if (picked != null) {
       setState(() => _currentValue = picked);
       widget.onChanged?.call(picked);
 
       if (showFeedback) {
-        showFloatingFeedback(context, "Horário selecionado: ${picked.format(context)}");
+        showFloatingFeedback(
+          context,
+          "Horário selecionado: ${picked.format(context)}",
+        );
       }
     }
   }
@@ -99,17 +105,48 @@ class _AssistiveUITimePickerState extends State<AssistiveUITimePicker> {
   Widget build(BuildContext context) {
     final provider = context.watch<UserComponentProvider>();
 
-    final width = getScaledPresetConfig(provider, prefix, 'width', widget.width);
-    final height = getScaledPresetConfig(provider, prefix, 'height', widget.height);
-    final touchPadding = getScaledPresetConfig(provider, prefix, 'touchPadding', widget.touchPadding);
-    final fontSize = getScaledPresetConfig(provider, prefix, 'fontSize', widget.fontSize);
-    final padding = getScaledPresetConfig(provider, prefix, 'padding', widget.padding);
+    final width = getScaledPresetConfig(
+      provider,
+      prefix,
+      'width',
+      widget.width,
+    );
+    final height = getScaledPresetConfig(
+      provider,
+      prefix,
+      'height',
+      widget.height,
+    );
+    final touchPadding = getScaledPresetConfig(
+      provider,
+      prefix,
+      'touchPadding',
+      widget.touchPadding,
+    );
+    final fontSize = getScaledPresetConfig(
+      provider,
+      prefix,
+      'fontSize',
+      widget.fontSize,
+    );
+    final padding = getScaledPresetConfig(
+      provider,
+      prefix,
+      'padding',
+      widget.padding,
+    );
     final color = provider.getConfig<Color>("${prefix}_color") ?? widget.color;
-    final fontColor = provider.getConfig<Color>("${prefix}_fontColor") ?? widget.fontColor;
-    final enableHaptic = provider.getConfig<bool>("${prefix}_enableHaptic") ?? widget.enableHaptic;
-    final showFeedback = provider.getConfig<bool>("${prefix}_showFeedback") ?? widget.showFeedback;
+    final fontColor =
+        provider.getConfig<Color>("${prefix}_fontColor") ?? widget.fontColor;
+    final enableHaptic =
+        provider.getConfig<bool>("${prefix}_enableHaptic") ??
+        widget.enableHaptic;
+    final showFeedback =
+        provider.getConfig<bool>("${prefix}_showFeedback") ??
+        widget.showFeedback;
     final pressDelayMs =
-        provider.getConfig<double>("${prefix}_pressDelay") ?? widget.pressDelay.inMilliseconds;
+        provider.getConfig<double>("${prefix}_pressDelay") ??
+        widget.pressDelay.inMilliseconds;
     final pressDelay = Duration(milliseconds: pressDelayMs.toInt());
 
     return GestureDetector(
@@ -123,14 +160,20 @@ class _AssistiveUITimePickerState extends State<AssistiveUITimePicker> {
           padding: EdgeInsets.symmetric(horizontal: padding),
           decoration: BoxDecoration(
             color: color,
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: Colors.black12),
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+              color: Theme.of(
+                context,
+              ).colorScheme.outline.withValues(alpha: 0.4),
+            ),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                _currentValue == null ? widget.label : _currentValue!.format(context),
+                _currentValue == null
+                    ? widget.label
+                    : _currentValue!.format(context),
                 style: TextStyle(color: fontColor, fontSize: fontSize),
               ),
               Icon(Icons.access_time, color: fontColor, size: fontSize * 1.5),

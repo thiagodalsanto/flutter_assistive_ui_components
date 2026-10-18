@@ -84,19 +84,53 @@ class _AssistiveUITextButtonState extends State<AssistiveUITextButton>
   Widget build(BuildContext context) {
     final provider = context.watch<UserComponentProvider>();
 
-    final width = getScaledPresetConfig(provider, prefix, 'width', widget.size.width);
-    final height = getScaledPresetConfig(provider, prefix, 'height', widget.size.height);
-    final fontSize = getScaledPresetConfig(provider, prefix, 'fontSize', widget.fontSize);
-    final touchPadding = getScaledPresetConfig(provider, prefix, 'touchPadding', widget.touchPadding);
-    final padding = getScaledPresetConfig(provider, prefix, 'padding', widget.padding);
+    final width = getScaledPresetConfig(
+      provider,
+      prefix,
+      'width',
+      widget.size.width,
+    );
+    final height = getScaledPresetConfig(
+      provider,
+      prefix,
+      'height',
+      widget.size.height,
+    );
+    final fontSize = getScaledPresetConfig(
+      provider,
+      prefix,
+      'fontSize',
+      widget.fontSize,
+    );
+    final touchPadding = getScaledPresetConfig(
+      provider,
+      prefix,
+      'touchPadding',
+      widget.touchPadding,
+    );
+    final padding = getScaledPresetConfig(
+      provider,
+      prefix,
+      'padding',
+      widget.padding,
+    );
     final color = provider.getConfig<Color>("${prefix}_color") ?? widget.color;
-    final fontColor = provider.getConfig<Color>("${prefix}_fontColor") ?? widget.fontColor;
-    final enableHaptic = provider.getConfig<bool>("${prefix}_enableHaptic") ?? widget.enableHaptic;
-    final showFeedback = provider.getConfig<bool>("${prefix}_showFeedback") ?? widget.showFeedback;
-    final feedbackText = provider.getConfig<String>("${prefix}_feedbackText") ?? widget.feedbackText;
-    final pressDelayMs = provider.getConfig<double>("${prefix}_pressDelay") ?? 0;
+    final fontColor =
+        provider.getConfig<Color>("${prefix}_fontColor") ?? widget.fontColor;
+    final enableHaptic =
+        provider.getConfig<bool>("${prefix}_enableHaptic") ??
+        widget.enableHaptic;
+    final showFeedback =
+        provider.getConfig<bool>("${prefix}_showFeedback") ??
+        widget.showFeedback;
+    final feedbackText =
+        provider.getConfig<String>("${prefix}_feedbackText") ??
+        widget.feedbackText;
+    final pressDelayMs =
+        provider.getConfig<double>("${prefix}_pressDelay") ?? 0;
     final pressDelay = Duration(milliseconds: pressDelayMs.toInt());
-    final iconEnabled = provider.getConfig<bool>("${prefix}_iconEnabled") ?? widget.iconEnabled;
+    final iconEnabled =
+        provider.getConfig<bool>("${prefix}_iconEnabled") ?? widget.iconEnabled;
     final icon = provider.getConfig<IconData>("${prefix}_icon") ?? widget.icon;
 
     return GestureDetector(
@@ -120,7 +154,10 @@ class _AssistiveUITextButtonState extends State<AssistiveUITextButton>
           child: TextButton(
             style: TextButton.styleFrom(
               backgroundColor: color,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              surfaceTintColor: Colors.transparent,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14),
+              ),
               padding: EdgeInsets.symmetric(horizontal: padding),
             ),
             onPressed:
@@ -136,40 +173,57 @@ class _AssistiveUITextButtonState extends State<AssistiveUITextButton>
                     ),
             child: LayoutBuilder(
               builder: (context, constraints) {
-                return FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: DefaultTextStyle(
-                    style: TextStyle(fontSize: fontSize, color: fontColor),
-                    child: IconTheme(
-                      data: IconThemeData(color: fontColor, size: fontSize),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          if (widget.swapIconLabel && icon != null && iconEnabled) ...[
-                            ConstrainedBox(
-                              constraints: BoxConstraints(maxWidth: constraints.maxWidth * 0.8),
-                              child: Text(
-                                widget.label,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                softWrap: false,
+                // O texto já é dimensionado pelo preset via getScaledPresetConfig.
+                // O textScaler ambiente é neutralizado para evitar escala dupla
+                // quando a página também aplica o textScaler do preset.
+                return MediaQuery(
+                  data: MediaQuery.of(
+                    context,
+                  ).copyWith(textScaler: TextScaler.noScaling),
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: DefaultTextStyle(
+                      style: TextStyle(fontSize: fontSize, color: fontColor),
+                      child: IconTheme(
+                        data: IconThemeData(color: fontColor, size: fontSize),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (widget.swapIconLabel &&
+                                icon != null &&
+                                iconEnabled) ...[
+                              ConstrainedBox(
+                                constraints: BoxConstraints(
+                                  maxWidth: constraints.maxWidth * 0.8,
+                                ),
+                                child: Text(
+                                  widget.label,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  softWrap: false,
+                                ),
                               ),
-                            ),
-                            const SizedBox(width: 6),
-                            Icon(icon),
-                          ] else if (widget.swapIconLabel == false) ...[
-                            if (icon != null && iconEnabled) ...[Icon(icon), const SizedBox(width: 6)],
-                            ConstrainedBox(
-                              constraints: BoxConstraints(maxWidth: constraints.maxWidth * 0.8),
-                              child: Text(
-                                widget.label,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                softWrap: false,
+                              const SizedBox(width: 6),
+                              Icon(icon),
+                            ] else if (widget.swapIconLabel == false) ...[
+                              if (icon != null && iconEnabled) ...[
+                                Icon(icon),
+                                const SizedBox(width: 6),
+                              ],
+                              ConstrainedBox(
+                                constraints: BoxConstraints(
+                                  maxWidth: constraints.maxWidth * 0.8,
+                                ),
+                                child: Text(
+                                  widget.label,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  softWrap: false,
+                                ),
                               ),
-                            ),
+                            ],
                           ],
-                        ],
+                        ),
                       ),
                     ),
                   ),
