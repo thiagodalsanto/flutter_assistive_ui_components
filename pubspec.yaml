@@ -1,6 +1,6 @@
 name: flutter_assistive_ui_components
 description: "Flutter Assistive UI Components - A comprehensive collection of accessible and assistive UI components for Flutter applications."
-version: 1.0.0
+version: 1.1.0
 repository: https://github.com/thiagodalsanto/flutter_assistive_ui_components
 
 environment:
