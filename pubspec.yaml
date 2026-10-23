@@ -1,6 +1,6 @@
 name: flutter_assistive_ui_components
 description: "Flutter Assistive UI Components - A comprehensive collection of accessible and assistive UI components for Flutter applications."
-version: 1.1.0
+version: 1.2.0
 repository: https://github.com/thiagodalsanto/flutter_assistive_ui_components
 
 environment:
@@ -13,7 +13,6 @@ dependencies:
   provider: ^6.1.2
   shared_preferences: ^2.5.2
   table_calendar: ^3.2.0
-  flutter_colorpicker: ^1.0.5
   salomon_bottom_bar: ^3.3.2
   flutter_form_builder: ^10.3.0+2
   form_builder_validators: ^11.3.0
